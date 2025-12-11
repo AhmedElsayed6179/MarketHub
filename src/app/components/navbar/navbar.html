@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-black px-3">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/Home">
+      {{ username ? ('Hi, ' + username) : 'MarketHub' }}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto">
+        <li class="navbar-item mx-2">
+          <a class="nav-link" routerLink="/Home" routerLinkActive="active">Home</a>
+        </li>
+        <li class="navbar-item mx-2">
+          <a class="nav-link" routerLink="/Products" routerLinkActive="active">Products</a>
+        </li>
+        @if (!IsloggedIn) {
+        <li class="navbar-item mx-2">
+          <a class="nav-link" routerLink="/Login" routerLinkActive="active">Login</a>
+        </li>
+        }
+        @if (IsloggedIn) {
+        <li class="navbar-item mx-2">
+          <a class="nav-link" (click)="Logout()" routerLinkActive="active" style="cursor: pointer;">Logout</a>
+        </li>
+        }
+      </ul>
+    </div>
+  </div>
+</nav>

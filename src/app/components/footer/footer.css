@@ -1,0 +1,34 @@
+footer .mb-3 a i {
+  transition: transform 0.3s, color 0.3s;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+footer .mb-3 a:hover i {
+  transform: scale(1.3);
+}
+
+footer .mb-3 a[title="Login"]:hover i {
+  color: #ffc107;
+}
+
+footer .mb-3 a[title="Logout"]:hover i {
+  color: #d20e0e;
+}
+
+footer .mb-3 a[title="Facebook"]:hover i {
+  color: #4267B2;
+}
+
+footer .mb-3 a[title="Twitter"]:hover i {
+  color: #1DA1F2;
+}
+
+footer a.text-white.fw-bold {
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+footer a.text-white.fw-bold:hover {
+  color: #ffc107;
+  text-shadow: 0 0 5px #ffc107;
+}

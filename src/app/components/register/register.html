@@ -1,0 +1,108 @@
+<div class="d-flex justify-content-center align-items-start pt-5 pb-5 Image-Background">
+  <div class="card p-4 shadow bg-black text-white" style="width: 450px; min-height: 580px;">
+    <h3 class="text-center mb-3">Register</h3>
+    <form [formGroup]="userRegisterForm" (submit)="Register()">
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Username :</label>
+        <input type="text" formControlName="username" name="username" class="form-control" maxlength="20" id="username"
+          required />
+        @if (username?.touched && username?.invalid) {
+        <div class="text-danger text-center">
+          @if (username?.errors?.['required']) {
+          <p>Username Is Required</p>
+          }
+          @if (username?.errors?.['pattern']) {
+          <p>Username Must Be Between 4 to 10 characters</p>
+          }
+        </div>
+        }
+      </div>
+      <!-- Full Name -->
+      <div class="mb-3">
+        <label for="name" class="form-label">Full Name :</label>
+        <input type="text" formControlName="name" name="name" class="form-control" id="name" maxlength="25" />
+        @if (name?.touched && name?.invalid) {
+        <div class="text-danger text-center">
+          @if (name?.errors?.['required']) {
+          <p>Full Name Is Required</p>
+          }
+          @if (name?.errors?.['pattern']) {
+          <p>Full Name Must Be Between 4 to 20 characters</p>
+          }
+        </div>
+        }
+      </div>
+      <!-- Email Address -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email Address :</label>
+        <input type="email" formControlName="email" name="email" class="form-control" id="email" />
+        @if (email?.touched && email?.invalid) {
+        <div class="text-danger text-center">
+          @if (email?.errors?.['required']) {
+          <p>Email Address Is Required</p>
+          }
+        </div>
+        }
+      </div>
+      <!-- Phone Number -->
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number :</label>
+        <input type="tel" formControlName="phone" name="phone" class="form-control" id="phone" maxlength="11" />
+        @if (phone?.touched && phone?.invalid) {
+        <div class="text-danger text-center">
+          @if (phone?.errors?.['required']) {
+          <p>Phone Number Is Required</p>
+          }
+          @if (phone?.errors?.['pattern']) {
+          <p>Phone number must start with 010, 011, 012, or 015</p>
+          }
+        </div>
+        }
+      </div>
+      <!-- Password -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Password :</label>
+        <div class="input-group">
+          <input [type]="ShowPass ? 'text' : 'password'" formControlName="password" name="password" class="form-control"
+            id="password" maxlength="25" />
+          <button type="button" class="btn btn-outline-secondary" (click)="TogglePass()">{{ShowPass ? "Hide" :
+            "Show"}}</button>
+        </div>
+        @if (password?.touched && password?.invalid) {
+        <div class="text-danger text-center">
+          @if (password?.errors?.['required']) {
+          <p>Password Is Required</p>
+          }
+          @if (password?.errors?.['pattern']) {
+          <p>Password must contain at least one number and be 8 to 25 characters</p>
+          }
+        </div>
+        }
+      </div>
+      <!-- Confirm Password -->
+      <div class="mb-3">
+        <label for="confirm_password" class="form-label">Confirm Password :</label>
+        <div class="input-group">
+          <input [type]="ShowConfPass ? 'text' : 'password'" formControlName="confirm_password" name="confirm_password"
+            class="form-control" id="confirm_password" />
+          <button type="button" class="btn btn-outline-secondary" (click)="ToggleConfPass()">{{ShowConfPass ? "Hide" :
+            "Show"}}</button>
+        </div>
+        @if (confirm_password?.touched && confirm_password?.errors?.['required']) {
+        <p class="text-danger text-center">Confirm Password is Required</p>
+        }
+        @if (confirm_password?.touched && !confirm_password?.errors?.['required'] &&
+        userRegisterForm.errors?.['notMatching']
+        ) {
+        <p class="text-danger text-center">Passwords do not match</p>
+        }
+
+      </div>
+      <button type="submit" [disabled]="userRegisterForm.invalid" class="btn btn-primary w-100">Register</button>
+    </form>
+    <p class="text-center mt-3 text-white">
+      Have a Account? <a class="text-primary text-decoration-none" routerLink="/Login">Login</a>
+    </p>
+  </div>
+</div>

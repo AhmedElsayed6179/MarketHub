@@ -1,0 +1,30 @@
+<footer class="bg-black text-center text-white py-4">
+  <p class="mb-2">&copy; 2025 MarketHub. All Rights Reserved.</p>
+
+  <div class="mb-3">
+    @if (isLoggedIn) {
+    <a (click)="Logout()" class="text-white mx-2 fs-4" title="Logout">
+      <i class="fas fa-sign-out-alt"></i>
+    </a>
+    }
+    @if (!isLoggedIn) {
+    <a routerLink="/Login" class="text-white mx-2 fs-4" title="Login">
+      <i class="fas fa-sign-in-alt"></i>
+    </a>
+    }
+    <a href="#" class="text-white mx-2 fs-4" title="Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+    <a href="#" class="text-white mx-2 fs-4" title="Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+  </div>
+
+  <p class="mb-0">
+    Website By :
+    <a href="https://ahmedelsayed6179.github.io/Ahmed-Websites/" target="_blank"
+      class="text-white fw-bold text-decoration-none">
+      Ahmed Elsayed
+    </a>
+  </p>
+</footer>
