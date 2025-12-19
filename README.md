@@ -11,4 +11,6 @@ MarketHub is a modern web application built with **Angular 21**. It provides a d
 - SweetAlert2 integration for user-friendly notifications
 - Support for Gmail, Outlook, and Yahoo email addresses
 - Phone number validation (Egyptian & international formats)
+- Phone number validation (Egyptian & international formats)
+- Phone number validation (Egyptian & international formats)
 
