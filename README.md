@@ -4,13 +4,9 @@ MarketHub is a modern web application built with **Angular 21**. It provides a d
 
 ## Features
 
-- User authentication and profile management
-- Form validations with real-time error feedback
-- Password visibility toggle for convenience
-- Responsive UI built with Bootstrap
-- SweetAlert2 integration for user-friendly notifications
-- Support for Gmail, Outlook, and Yahoo email addresses
-- Phone number validation (Egyptian & international formats)
-- Phone number validation (Egyptian & international formats)
-- Phone number validation (Egyptian & international formats)
-
+- **User Authentication:** Sign up, log in, and manage your profile.
+- **Product Catalog:** Browse a wide range of products with detailed information.
+- **Shopping Cart:** Add products to your cart and adjust quantities.
+- **Checkout System:** Complete orders with a simple and secure checkout process.
+- **Responsive Design:** Optimized for desktop, tablet, and mobile devices.
+- **User Feedback:** Error messages and validation for better user experience.
