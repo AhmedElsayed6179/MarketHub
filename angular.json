@@ -15,7 +15,7 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "outputPath": "dist/MarketHub/browser",
+            "outputPath": "dist/MarketHub/browser/browser",
             "assets": [
               {
                 "glob": "**/*",
