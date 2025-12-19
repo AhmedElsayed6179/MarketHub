@@ -12,14 +12,3 @@ MarketHub is a modern web application built with **Angular 21**. It provides a d
 - Support for Gmail, Outlook, and Yahoo email addresses
 - Phone number validation (Egyptian & international formats)
 
-## Development
-
-### Prerequisites
-
-Make sure you have **Node.js** and **Angular CLI** installed:
-
-```bash
-node -v
-npm -v
-ng version
-
