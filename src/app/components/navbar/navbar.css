@@ -2,7 +2,6 @@
   justify-content: space-around;
 }
 
-/* الشكل الأساسي */
 .main-navbar {
   position: fixed;
   top: 0;
@@ -13,29 +12,44 @@
   padding: 14px 20px;
 }
 
-/* لينكات */
-.main-navbar .nav-link {
+.main-navbar .nav-link:not([routerLink="/Login"]) {
   font-weight: 500;
-  color: #999b9d;
+  color: #9b9b9b;
   transition: color 0.3s, transform 0.3s;
 }
 
-.main-navbar .nav-link:hover {
+.main-navbar .nav-link:not([routerLink="/Login"]):hover {
   color: #ffffff;
   transform: translateY(-1px);
 }
 
-/* ===== عند الاسكرول ===== */
+.main-navbar .nav-link[routerLink="/Login"] {
+  font-weight: 600;
+  color: #fff;
+  background: #ff4d4f;
+  padding: 6px 18px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.main-navbar .nav-link[routerLink="/Login"]:hover {
+  color: #fff;
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.main-navbar .nav-link[routerLink="/Login"].active {
+  background: #464545;
+  color: #fff;
+}
+
 .main-navbar.scrolled {
   background: #0d0d0d;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(6px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
   padding: 8px 20px;
 }
 
-/* Active link */
 .nav-link.active {
   color: #f9fafb !important;
 }
-
