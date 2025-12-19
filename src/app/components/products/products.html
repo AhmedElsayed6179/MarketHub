@@ -1,46 +1,100 @@
 @if (isLoggedIn) {
-<div class="container py-5 Image-Background">
-  <h2 class="text-center fw-bold mb-5">Our Products 🛍️</h2>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-    @for (prd of products$ | async; track prd.id; let i = $index) {
-    <div class="col">
-      <div class="card h-100 shadow rounded-3">
-        <div class="d-flex justify-content-center align-items-center bg-white p-3 border-bottom" style="height: 230px;">
-          <img [src]="prd.image" [alt]="prd.title" class="img-fluid" style="max-height: 100%; object-fit: contain;">
+<div class="home-bg">
+  <div class="container py-5">
+    <h2 class="text-center fw-bold mb-3 d-flex justify-content-center align-items-center gap-2">
+      Our Products
+      <img src="market.png" width="28" height="28" alt="products icon" />
+    </h2>
+    <p class="text-center text-muted mb-3">
+      You can search for any product or select your preferred category, and easily buy your favorite items in the best
+      way!
+    </p>
+
+    <div class="container py-3">
+      <div class="row g-2 align-items-center">
+        <!-- بحث باسم المنتج -->
+        <div class="col-12 col-md-6">
+          <input type="text" class="form-control" placeholder="Search by product name"
+            (ngModelChange)="filterProducts()" [(ngModel)]="searchTerm">
         </div>
-        <div class="card-body">
-          <h6 class="fw-bold text-truncate mb-2">{{ i + 1 }} - {{ prd.title }}</h6>
-          <p class="text-primary fw-semibold mb-1">{{ prd.price | currency:'EGP' }}</p>
-          <p class="small text-muted mt-1 mb-2">{{ prd.category }}</p>
-          <p class="small text-muted text-truncate">{{ prd.description }}</p>
-          <div class="d-flex align-items-center mt-2">
-            <span class="badge bg-success me-2">{{ prd.rating.rate }} ★</span>
-            <small class="text-muted">({{ prd.rating.count }} reviews)</small>
-          </div>
+
+        <!-- اختيار الفئة -->
+        <div class="col-12 col-md-4">
+          <select class="form-select" [(ngModel)]="selectedCategory" (ngModelChange)="filterProducts()">
+            <option value="">All Categories</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
         </div>
-        <div class="card-footer bg-transparent border-0 text-center pb-3">
-          <button class="btn btn-outline-primary btn-sm px-4" (click)="BuyNow()">Add to Cart</button>
+
+        <!-- أزرار البحث وإعادة الضبط -->
+        <div class="col-12 col-md-2 d-flex flex-wrap gap-2">
+          <button class="btn btn-primary flex-grow-1" (click)="filterProducts()">Search</button>
+          <button class="btn btn-secondary flex-grow-1" (click)="resetFilter()">Reset</button>
         </div>
       </div>
     </div>
-    }
-    @empty {
-    <h1 class="text-center text-danger">Not Found Products</h1>
-    }
+
+    <!-- No Products Found -->
+    <div *ngIf="filteredProducts$ | async as products;">
+      <div *ngIf="products.length === 0"
+        class="d-flex flex-column justify-content-center align-items-center vh-50 text-center mt-2">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading products...</span>
+        </div>
+        <span class="text-primary fw-bold fs-5">Loading Products, please wait...</span>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div *ngIf="filteredProducts$ | async as products"
+      class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      <div *ngFor="let prd of products; let i = index" class="col">
+        <div class="card h-100 shadow rounded-3">
+          <div class="d-flex justify-content-center align-items-center bg-white p-3 border-bottom"
+            style="height: 230px; border-radius: 12px; overflow: hidden;">
+            <a (click)="navigateDetails(prd.id)" class="d-flex justify-content-center align-items-center w-100 h-100">
+              <img [src]="prd.image" [alt]="prd.title" class="img-fluid"
+                style="max-height: 200px; width: auto; object-fit: contain; transition: transform 0.3s ease; cursor: pointer;">
+            </a>
+          </div>
+          <div class="card-body">
+            <h6 class="fw-bold text-truncate mb-2">{{ i + 1 }} - {{ prd.title }}</h6>
+            <p class="text-primary fw-semibold mb-1">{{ prd.price | currency:'USD' }}</p>
+            <p class="small text-muted mt-1 mb-2">{{ prd.category }}</p>
+            <p class="small text-muted text-truncate">{{ prd.description }}</p>
+            <div class="d-flex align-items-center mt-2">
+              <span class="badge bg-success me-2">{{ prd.rating.rate }} ★</span>
+              <small class="text-muted">({{ prd.rating.count }} reviews)</small>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent border-0 text-center pb-3 d-flex">
+            <button class="btn btn-outline-primary btn-sm px-4 me-2" (click)="addToCart(prd)">Add to Cart</button>
+            <button class="btn btn-outline-info btn-sm px-4" (click)="navigateDetails(prd.id)">View Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 }
 
 @if (!isLoggedIn) {
-<div class="container text-center my-4">
-  <h1>You are not logged in</h1>
-  <p class="lead">Please log in or register to view products</p>
-  <div class="mt-4">
-    <button class="btn btn-primary mx-2" routerLink="/Login">Login</button>
-    <button class="btn btn-info mx-2" routerLink="/Register">Register</button>
-  </div>
-  <div class="mt-3">
-    <img src="images/erorr.png" alt="Placeholder" class="img-fluid" style="border-radius: 20px;width: 150px;">
+<div class="home-bg d-flex justify-content-center align-items-center min-vh-100">
+  <div class="text-center">
+    <img src="images/error.png" alt="Not Logged In" class="img-fluid mb-4 floating-img" style="max-width: 180px;">
+    <h1 class="display-5 fw-bold text-warning mb-3">You are not logged in</h1>
+    <p class="lead mb-4">
+      Please log in or register to view products
+      <img src="market.png" alt="icon" style="width:20px; height:20px; margin-left:6px;">
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a routerLink="/Login" class="btn btn-primary btn-lg px-4 py-2">
+        Login <i class="fas fa-sign-in-alt ms-2"></i>
+      </a>
+      <a routerLink="/Register" class="btn btn-info btn-lg text-white px-4 py-2">
+        Register <i class="fas fa-user-plus ms-2"></i>
+      </a>
+    </div>
   </div>
 </div>
 }

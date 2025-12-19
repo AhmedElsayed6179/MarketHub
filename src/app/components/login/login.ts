@@ -75,20 +75,20 @@ export class Login implements OnInit {
         const FindUser = users.find(u => (u.username === username || u.email === username) && u.password === password)
 
         if (FindUser) {
-          localStorage.setItem("user", JSON.stringify(FindUser))
-
-          const realUsername = FindUser.username;
-
-          this._UserAuth.Login(realUsername);
+          this._UserAuth.Login(FindUser.username, FindUser.password);
 
           Swal.fire({
-            title: 'Success!',
-            text: 'Login Successful',
-            icon: 'success',
-            confirmButtonText: "OK"
-          })
-
-          this._Router.navigateByUrl("/Products")
+            title: `Welcome, ${FindUser.username}!`,
+            html: 'You have successfully logged in.<br>Redirecting to Home...',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+            willClose: () => {
+              this._Router.navigateByUrl("/Home", { replaceUrl: true });
+            }
+          });
 
           if (this.RememberMe?.value) {
             localStorage.setItem("SavedUserName", username)

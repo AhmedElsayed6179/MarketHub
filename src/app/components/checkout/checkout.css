@@ -1,0 +1,59 @@
+.product-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background-color: #f8f9fa;
+  padding: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.payment-card {
+  display: block;
+  cursor: pointer;
+}
+
+.payment-card .card-content {
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  transition: all 0.25s ease;
+}
+
+.payment-card img {
+  width: 40px;
+  height: auto;
+}
+
+.payment-card i {
+  font-size: 32px;
+  color: #16a34a;
+}
+
+.payment-card span {
+  font-weight: 600;
+  font-size: 16px;
+  color: #111827;
+}
+
+.payment-card:hover .card-content {
+  border-color: #22c55e;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.payment-card input:checked + .card-content {
+  border-color: #16a34a;
+  background-color: #f0fdf4;
+}

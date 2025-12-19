@@ -1,0 +1,137 @@
+<!-- Wrapper بالخلفية -->
+<div class="home-bg">
+
+  <!-- Product Content -->
+  <div *ngIf="product$ | async as product; else loading" class="container py-5">
+    <div class="row g-4 align-items-center">
+
+      <!-- Product Image -->
+      <div class="col-md-6 text-center">
+        <img [src]="product.image" [alt]="product.title" class="img-fluid product-img" />
+      </div>
+
+      <!-- Product Details -->
+      <div class="col-md-6">
+        <h2 class="fw-bold mb-2">{{ product.title }}</h2>
+
+        <p class="text-muted mb-1">
+          <strong>Category:</strong> {{ product.category }}
+        </p>
+
+        <p class="text-primary fw-semibold fs-4 mb-2">
+          {{ product.price | currency:'USD' }}
+        </p>
+
+        <p class="mt-3">{{ product.description }}</p>
+
+        <div class="d-flex align-items-center mt-2 mb-3">
+          <span class="badge bg-success me-2">
+            {{ product.rating.rate }} ★
+          </span>
+          <small class="text-muted">
+            ({{ product.rating.count }} reviews)
+          </small>
+        </div>
+
+        <div class="d-flex gap-2 mb-4 flex-wrap">
+          <button class="btn btn-outline-primary flex-grow-1" (click)="addToCart(product)">
+            Add to Cart
+          </button>
+
+          <button class="btn btn-outline-secondary flex-grow-1" (click)="openCheckout(product)">
+            Buy Now
+          </button>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <button class="btn btn-danger" [disabled]="currentId == idsArr[0]" (click)="prev()">
+            Prev
+          </button>
+
+          <button class="btn btn-secondary" routerLink="/Products">
+            ← Back to Products
+          </button>
+
+          <button class="btn btn-success" [disabled]="currentId == idsArr[idsArr.length - 1]" (click)="next()">
+            Next
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Loading State -->
+<ng-template #loading>
+  <div class="product-bg d-flex flex-column justify-content-center align-items-center min-vh-100 text-center">
+    <div class="spinner-border text-primary mb-3" style="width:3rem; height:3rem;" role="status">
+      <span class="visually-hidden">Loading product...</span>
+    </div>
+
+    <h5 class="fw-bold text-primary mb-1">
+      Fetching Product Details
+    </h5>
+    <small class="text-muted">
+      Please wait while we load the product for you.
+    </small>
+  </div>
+</ng-template>
+
+<!-- Overlay -->
+<div class="checkout-overlay" *ngIf="showCheckout">
+  <div class="checkout-modal">
+
+    <h4 class="mb-3">Complete Your Order</h4>
+
+    <form [formGroup]="checkoutForm">
+
+      <input class="form-control mb-2" placeholder="Name" formControlName="name" />
+      <div *ngIf="name?.touched && name?.invalid" class="text-danger mt-1">Name is required</div>
+      <input class="form-control mb-2" placeholder="Address" formControlName="address" />
+      <div *ngIf="address?.touched && address?.invalid" class="text-danger mt-1">Address is required</div>
+      <input class="form-control mb-2" placeholder="Phone" formControlName="phone" />
+      <div *ngIf="phone?.touched && phone?.invalid" class="text-danger mt-1">Phone is required</div>
+
+      <div class="mb-3">
+        <label class="fw-semibold d-block mb-2">Payment Method</label>
+
+        <label class="me-3">
+          <input type="radio" value="cod" formControlName="paymentMethod" />
+          Cash
+        </label>
+
+        <label>
+          <input type="radio" value="visa" formControlName="paymentMethod" />
+          Visa
+        </label>
+      </div>
+
+      <!-- Visa Fields -->
+      <div *ngIf="checkoutForm.get('paymentMethod')?.value === 'visa'" class="visa-box">
+
+        <input class="form-control mb-2" placeholder="Card Number" formControlName="cardNumber" />
+        <input class="form-control mb-2" placeholder="Cardholder Name" formControlName="cardName" />
+
+        <div class="d-flex gap-2">
+          <input class="form-control" placeholder="MM/YY" formControlName="expiry" />
+          <input class="form-control" placeholder="CVV" formControlName="cvv" />
+        </div>
+
+      </div>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-success flex-grow-1" (click)="confirmOrder()">
+          Confirm Order
+        </button>
+        <button class="btn btn-outline-secondary" (click)="closeCheckout()">
+          Cancel
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

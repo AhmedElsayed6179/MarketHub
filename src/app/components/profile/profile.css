@@ -1,0 +1,17 @@
+.profile-form {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition:
+    max-height 0.45s cubic-bezier(.4,0,.2,1),
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.profile-form.show {
+  max-height: 2000px; /* رقم كبير آمن */
+  opacity: 1;
+  transform: translateY(0);
+}
+

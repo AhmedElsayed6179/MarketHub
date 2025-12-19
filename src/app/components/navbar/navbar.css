@@ -1,3 +1,41 @@
-.home{
+.home {
   justify-content: space-around;
 }
+
+/* الشكل الأساسي */
+.main-navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  background: #0a2a66;
+  transition: all 0.35s ease;
+  padding: 14px 20px;
+}
+
+/* لينكات */
+.main-navbar .nav-link {
+  font-weight: 500;
+  color: #999b9d;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.main-navbar .nav-link:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ===== عند الاسكرول ===== */
+.main-navbar.scrolled {
+  background: #0d0d0d;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  padding: 8px 20px;
+}
+
+/* Active link */
+.nav-link.active {
+  color: #f9fafb !important;
+}
+

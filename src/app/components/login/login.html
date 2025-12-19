@@ -1,10 +1,13 @@
-<div class="d-flex justify-content-center align-items-center vh-100 Image-Background">
+<div class="d-flex justify-content-center align-items-center vh-100 px-3 Image-Background">
   <div class="card p-4 shadow bg-black text-white" style="width: 450px; border-radius: 10px;">
-    <h3 class="text-center mb-4">Login</h3>
+    <h3 class="text-center mb-3 d-flex align-items-center justify-content-center">
+      Welcome back! <img src="market.png" alt="User Icon" class="ms-2" style="width:24px; height:24px;" />
+    </h3>
     <form [formGroup]="userLogin" (submit)="login()">
       <div class="mb-3">
         <label for="Username" class="form-label">Username or Email :</label>
-        <input type="text" formControlName="username" class="form-control" name="username" id="Username" />
+        <input type="text" formControlName="username" placeholder="Username or Email" class="form-control"
+          name="username" id="Username" />
         @if (username?.touched && username?.invalid) {
         <div class="text-danger text-center">
           @if (username?.errors?.['required']) {
@@ -17,8 +20,8 @@
       <div class="mb-3">
         <label for="password" class="form-label">Password :</label>
         <div class="input-group">
-          <input [type]="showPass ? 'text' : 'password'" formControlName="password" name="password" class="form-control"
-            id="password" />
+          <input [type]="showPass ? 'text' : 'password'" placeholder="Password" formControlName="password"
+            name="password" class="form-control" id="password" />
           <button type="button" class="btn btn-outline-secondary" (click)="TogglePass()">{{showPass ? 'Hide' :
             'Show'}}</button>
         </div>
@@ -31,16 +34,23 @@
         }
       </div>
 
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" formControlName="RememberMe" name="RememberMe" id="RememberMe">
-        <label for="RememberMe" class="form-check-label">Remember Me</label>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" formControlName="RememberMe" name="RememberMe"
+            id="RememberMe">
+          <label for="RememberMe" class="form-check-label">Remember Me</label>
+        </div>
+
+        <div>
+          <a routerLink="/ForgotPassword" class="text-primary text-decoration-none">Forgot Password?</a>
+        </div>
       </div>
 
       <button type="submit" [disabled]="userLogin.invalid" class="btn btn-primary w-100">Login</button>
     </form>
 
     <p class="text-center mt-3 text-white">
-      Create a Account? <a class="text-primary text-decoration-none" routerLink="/Register">Register</a>
+      Don't have an account? <a class="text-primary text-decoration-none" routerLink="/Register">Register</a>
     </p>
   </div>
 </div>

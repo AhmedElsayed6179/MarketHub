@@ -1,4 +1,4 @@
-<div class="container my-5 text-center">
+<div class="home-bg container-fluid py-5 text-center">
 
   <!-- العنوان -->
   @if (!isLoggedIn) {
@@ -7,7 +7,9 @@
 
   <!-- وصف الصفحة -->
   @if (isLoggedIn && username) {
-  <p class="lead text-muted mb-4">{{'Welcome back, ' + username + '! Start exploring our products and place your orders easily'}}</p>
+  <p class="lead text-muted mb-4">
+    Welcome back, <strong>{{ username }}</strong>! Start exploring our products and place your orders easily
+  </p>
   }
   @if (!isLoggedIn) {
   <p class="lead text-muted mb-4">Hello! Discover a variety of products and enjoy a smooth shopping experience</p>
@@ -82,7 +84,7 @@
   <section class="row align-items-center mb-5">
     <!-- صورة -->
     <div class="col-md-6 mb-4 mb-md-0">
-      <img src="images/welcome.jpg" alt="Contact Us" class="img-fluid rounded-3 shadow">
+      <img src="images/clothing.jpg" alt="Contact Us" class="img-fluid rounded-3 shadow">
     </div>
 
     <!-- الفورم -->
@@ -92,19 +94,45 @@
         <p class="text-muted text-center mb-4">
           Have questions or need help? Fill out the form below and we'll get back to you shortly.
         </p>
-        <form class="p-3 bg-light rounded-3 shadow-sm">
+        <form class="p-3 bg-light rounded-3 shadow-sm" [formGroup]="contactForm" (ngSubmit)="submitForm()">
           <div class="mb-3">
             <label for="name" class="form-label fw-semibold">Name</label>
-            <input type="text" class="form-control form-control-sm" id="name" placeholder="Your Name">
+            <input type="text" class="form-control form-control-sm" id="name" placeholder="Your Name"
+              formControlName="name">
+            @if (name?.touched && name?.invalid) {
+            <div class="text-danger text-center mt-2">
+              @if (name?.errors?.['required']) {
+              <p>Your Name Is Required</p>
+              }
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="email" class="form-label fw-semibold">Email</label>
-            <input type="email" class="form-control form-control-sm" id="email" placeholder="you@example.com">
+            <input type="email" class="form-control form-control-sm" id="email" placeholder="you@example.com"
+              formControlName="email">
+            @if (email?.touched && email?.invalid) {
+            <div class="text-danger text-center mt-2">
+              @if (email?.errors?.['required']) {
+              <p>Your Email Address Is Required</p>
+              }
+              @if (email?.errors?.['email'] && email?.value) {
+              <p>Invalid Email Address</p>
+              }
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="message" class="form-label fw-semibold">Message</label>
             <textarea class="form-control form-control-sm" style="resize: none;" id="message" rows="5"
-              placeholder="Your Message"></textarea>
+              placeholder="Your Message" formControlName="message"></textarea>
+            @if (message?.touched && message?.invalid) {
+            <div class="text-danger text-center mt-2">
+              @if (message?.errors?.['required']) {
+              <p>Your Message Is Required</p>
+              }
+            </div>
+            }
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-primary btn-sm fw-bold">
@@ -115,6 +143,5 @@
       </div>
     </div>
   </section>
-
-
 </div>
+

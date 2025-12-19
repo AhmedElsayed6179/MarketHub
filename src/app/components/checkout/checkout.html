@@ -1,0 +1,122 @@
+<div class="home-bg py-5">
+  <div class="container">
+    <div class="card shadow-sm p-4">
+      <h2 class="mb-4 text-center text-primary">Checkout 🛒</h2>
+
+      <form [formGroup]="checkoutForm" (ngSubmit)="checkout()">
+        <!-- User Info -->
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control form-control-lg" formControlName="name"
+              placeholder="Enter your name" />
+            <div *ngIf="name?.touched && name?.invalid" class="text-danger mt-1">Name is required</div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Phone</label>
+            <input type="tel" class="form-control form-control-lg" formControlName="phone"
+              placeholder="Enter your phone number" />
+            <div *ngIf="phone?.touched && phone?.invalid" class="text-danger mt-1">Phone is required</div>
+          </div>
+          <div class="col-12 mb-3">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control form-control-lg" formControlName="address"
+              placeholder="Enter your address" />
+            <div *ngIf="address?.touched && address?.invalid" class="text-danger mt-1">Address is required</div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold mb-3 d-block">Payment Method</label>
+
+          <div class="row g-3">
+            <!-- Visa -->
+            <div class="col-md-6">
+              <label class="payment-card">
+                <input type="radio" class="d-none" formControlName="paymentMethod" value="visa" />
+                <div class="card-content">
+                  <img src="images/visa.svg" alt="Visa" />
+                  <span>Visa / Card</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Cash -->
+            <div class="col-md-6">
+              <label class="payment-card">
+                <input type="radio" class="d-none" formControlName="paymentMethod" value="cod" />
+                <div class="card-content">
+                  <i class="bi bi-cash-coin"></i>
+                  <span>Cash on Delivery</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visa Details -->
+        <div *ngIf="checkoutForm.get('paymentMethod')?.value === 'visa'" class="border rounded p-3 mb-4 bg-light">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Card Number</label>
+              <input type="text" maxlength="16" formControlName="cardNumber" class="form-control form-control-lg"
+                placeholder="1234 5678 9012 3456" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Expiry Date</label>
+              <input type="text" maxlength="5" formControlName="expiry" class="form-control form-control-lg" placeholder="MM/YY" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">CVV</label>
+              <input type="text" maxlength="3" formControlName="cvv" class="form-control form-control-lg" placeholder="123" />
+            </div>
+            <div class="col-12">
+              <label class="form-label">Cardholder Name</label>
+              <input type="text" formControlName="cardName" class="form-control form-control-lg" placeholder="Full Name" />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100 mb-4" [disabled]="cartItems.length === 0">
+          Checkout Now 🛒
+        </button>
+      </form>
+
+      <!-- Cart Summary -->
+      <div class="mt-4">
+        <h4 class="mb-3 text-secondary">Cart Summary</h4>
+
+        <ng-container *ngIf="cartItems$ | async as cartItems; else loadingCart">
+          <ul class="list-group">
+            <li class="list-group-item d-flex align-items-center shadow-sm mb-2 rounded" *ngFor="let item of cartItems">
+              <img [src]="item.image" alt="{{ item.title }}" class="rounded product-img"
+                style="width: 60px; height: 60px; object-fit: cover; margin-right: 15px;" />
+              <div>
+                <div class="fw-bold">{{ item.title }}</div>
+                <div>{{ item.quantity }} x ${{ item.price }}</div>
+              </div>
+              <div class="ms-auto fw-bold">${{ item.price * item.quantity }}</div>
+            </li>
+
+            <li *ngIf="!cartItems.length" class="list-group-item text-center text-muted">
+              Your cart is empty 🛒
+            </li>
+          </ul>
+        </ng-container>
+
+        <!-- Spinner Placeholder -->
+        <ng-template #loadingCart>
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-secondary">Loading cart...</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <p class="mt-3 fw-bold text-end fs-5">Total: ${{totalPrice}}</p>
+    </div>
+  </div>
+</div>

@@ -1,43 +1,126 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { IUser } from '../models/iuser';
+import { ApiUser } from './api-user';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class UserAuth {
-  private AuthSubject = new BehaviorSubject<boolean>(false)
-  private CurrentUserSubject = new BehaviorSubject<string | null>(null);
+  private authSubject = new BehaviorSubject<boolean>(false);
+  private currentUserSubject = new BehaviorSubject<IUser | null>(null);
+  private tokenSubject = new BehaviorSubject<string | null>(null);
+  private loadingSubject = new BehaviorSubject<boolean>(false);
 
-  isLoggedIn$ = this.AuthSubject.asObservable();
-  currentUsername$ = this.CurrentUserSubject.asObservable();
+  isLoggedIn$ = this.authSubject.asObservable();
+  currentUser$ = this.currentUserSubject.asObservable();
+  loading$ = this.loadingSubject.asObservable();
 
-  constructor(private _Router: Router) {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const userObj = JSON.parse(storedUser);
-      this.AuthSubject.next(true);
-      this.CurrentUserSubject.next(userObj.username);
+  constructor(private router: Router, private apiUser: ApiUser) {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      this.tokenSubject.next(token);
+      this.authSubject.next(true);
+      this.loadCurrentUserFromAPI().subscribe(); // تحميل البيانات فوراً
     }
   }
 
-  Login(username?: string) {
-    this.AuthSubject.next(true)
-    if (username) this.CurrentUserSubject.next(username);
+  /** تسجيل الدخول */
+  Login(username: string, password: string) {
+    this.loadingSubject.next(true);
+
+    this.apiUser.GetUserByUsernamePassword(username, password).subscribe({
+      next: user => {
+        if (!user) {
+          Swal.fire('Error', 'Invalid credentials', 'error');
+          this.loadingSubject.next(false);
+          return;
+        }
+
+        const token = btoa(user.id + ':' + Date.now());
+        localStorage.setItem('authToken', token);
+        this.tokenSubject.next(token);
+        this.authSubject.next(true);
+        this.currentUserSubject.next(user);
+        this.loadingSubject.next(false);
+      },
+      error: () => {
+        this.loadingSubject.next(false);
+        Swal.fire('Error', 'Login failed', 'error');
+      }
+    });
   }
 
+  /** تسجيل الخروج */
   Logout() {
     Swal.fire({
-      title: "Success!",
-      text: "Logout Successfully",
-      icon: "success",
-      cancelButtonText: "OK"
-    })
-    localStorage.removeItem("user")
-    this.AuthSubject.next(false)
-    this.CurrentUserSubject.next(null);
-    this._Router.navigateByUrl("/Home")
+      title: 'Are you sure?',
+      text: 'Do you want to logout?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Logout',
+      cancelButtonText: 'Cancel',
+    }).then(result => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('authToken');
+        this.tokenSubject.next(null);
+        this.authSubject.next(false);
+        this.currentUserSubject.next(null);
+        this.router.navigateByUrl('/Home');
+        Swal.fire('Logged Out!', 'You have been logged out successfully.', 'success');
+      }
+    });
+  }
+
+  /** تحقق سريع إذا كان المستخدم مسجل دخول */
+  isAuthenticated(): boolean {
+    return !!this.tokenSubject.value;
+  }
+
+  /** الحصول على التوكن الحالي */
+  getToken(): string | null {
+    return this.tokenSubject.value;
+  }
+
+  /** القيمة الحالية للمستخدم فوراً */
+  currentUserValue(): IUser | null {
+    return this.currentUserSubject.value;
+  }
+
+  /** تعيين المستخدم في state */
+  setCurrentUser(user: IUser | null) {
+    this.currentUserSubject.next(user);
+  }
+
+  /** جلب المستخدم من API بناءً على التوكن */
+  loadCurrentUserFromAPI(): Observable<IUser | null> {
+    const token = this.tokenSubject.value;
+    if (!token) return of(null);
+
+    const userId = Number(atob(token).split(':')[0]);
+    if (!userId) return of(null);
+
+    this.loadingSubject.next(true);
+
+    return this.apiUser.GetUserById(userId).pipe(
+      tap(user => this.currentUserSubject.next(user)),
+      tap(() => this.loadingSubject.next(false)),
+      catchError(err => {
+        this.loadingSubject.next(false);
+        return of(null);
+      })
+    );
+  }
+
+  /** الحصول على المستخدم فوراً أو من API */
+  getCurrentUser(): Observable<IUser | null> {
+    const user = this.currentUserSubject.value;
+    if (user) return of(user);
+
+    return this.loadCurrentUserFromAPI();
   }
 }
+

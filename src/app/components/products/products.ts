@@ -4,50 +4,108 @@ import { CommonModule } from '@angular/common';
 import { UserAuth } from '../../service/user-auth';
 import { Router, RouterLink } from '@angular/router';
 import { ProductsService } from '../../service/products.service';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { CartService } from '../../service/cart.service';
+import { ICartItem } from '../../models/icart';
+import { IUser } from '../../models/iuser';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './products.html',
   styleUrl: './products.css',
 })
 export class Products implements OnInit {
-  products$: Observable<Iproduct[]>;
-  isLoggedIn: boolean = false
+  filteredProducts$: Observable<Iproduct[]>;
+  categories: string[] = [];
+  searchTerm: string = '';
+  selectedCategory: string = '';
+  isLoggedIn: boolean = false;
+  private allProducts: Iproduct[] = [];
 
-  constructor(private _ProductsService: ProductsService, private _UserAuth: UserAuth, private _Router: Router, private titleService: Title) {
-    this.products$ = this._ProductsService.Products$;
-    this._UserAuth.isLoggedIn$.subscribe(status => {
-      this.isLoggedIn = status
-    })
-    this.titleService.setTitle("MarketHub - Products")
+  constructor(private _ProductsService: ProductsService, private _CartService: CartService, private _UserAuth: UserAuth, private titleService: Title, private router: Router) {
+    this.filteredProducts$ = this._ProductsService.filteredProducts$;
   }
 
   ngOnInit(): void {
-    // const stored = localStorage.getItem('products');
-    // if (stored) {
-    //   this.products = JSON.parse(stored);
-    // }
-    // this._Apiproducts.getallProducts().subscribe({
-    //   next: (res) => {
-    //     if (JSON.stringify(res) !== localStorage.getItem('products')) {
-    //       this.products = res;
-    //       localStorage.setItem('products', JSON.stringify(res));
-    //     }
-    //   },
-    //   error: (err) => console.log(err),
-    // });
+    this._ProductsService.currentFilter$.subscribe(filter => {
+      this.selectedCategory = filter.category;
+      this.searchTerm = filter.searchTerm;
+    });
+
+    this.filteredProducts$.subscribe(products => {
+      this.allProducts = products;
+      this.categories = [...new Set(this._ProductsService.AllProducts.map(p => p.category))];
+    });
+
+    this._UserAuth.isLoggedIn$.subscribe(status => {
+      this.isLoggedIn = status;
+    });
+
+    this.titleService.setTitle("MarketHub - Products");
   }
 
-  BuyNow() {
-    Swal.fire({
-      title: 'Coming Soon!',
-      text: 'This feature will be available soon. Stay tuned!',
-      icon: 'info',
-      confirmButtonText: 'OK'
+  filterProducts() {
+    this._ProductsService.filterProducts(this.searchTerm, this.selectedCategory);
+  }
+
+  resetFilter() {
+    this.searchTerm = '';
+    this.selectedCategory = '';
+    this._ProductsService.resetFilter();
+  }
+
+  navigateDetails(id: number) {
+    this.router.navigate(['/Details', id]);
+  }
+
+  addToCart(product: Iproduct) {
+    this._UserAuth.currentUser$.pipe(take(1)).subscribe(user => {
+      if (!user) {
+        Swal.fire('Login required', 'You must log in first!', 'warning');
+        return;
+      }
+
+      const item: ICartItem = {
+        productId: product.id,
+        title: product.title,
+        image: product.image,
+        price: product.price,
+        quantity: 1
+      };
+
+      const cleanUser = { id: user.id } as IUser;
+
+
+      this._CartService.addProductToUserCart(cleanUser, item).subscribe({
+        next: () => {
+          Swal.fire({
+            title: 'Adding product...',
+            html: 'Please wait',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
+
+          setTimeout(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Added!',
+              text: `${item.title} added to your cart.`,
+              timer: 1500,
+              showConfirmButton: false
+            });
+          }, 1000);
+        },
+        error: err => {
+          console.error(err);
+          Swal.fire('Error', 'Failed to add product to cart.', 'error');
+        }
+      });
     });
   }
 }

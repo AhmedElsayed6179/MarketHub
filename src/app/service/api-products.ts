@@ -12,4 +12,12 @@ export class ApiProducts {
   getallProducts(): Observable<Iproduct[]> {
     return this._Httpclient.get<Iproduct[]>(`${environment.baseUrl}`);
   }
+
+  getProductById(id: number): Observable<Iproduct> {
+    return this._Httpclient.get<Iproduct>(`${environment.baseUrl}/${id}`)
+  }
+
+  getAllProductIds(): Observable<number[]> {
+    return this.getallProducts().pipe(map(products => products.map(p => p.id)));
+  }
 }

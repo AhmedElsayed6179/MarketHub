@@ -1,4 +1,5 @@
 export const environment = {
-  baseUrl: "http://localhost:3100/products",
-  UserUrl: "http://localhost:3000/users"
+  baseUrl: "https://markethubdata-production.up.railway.app/products",
+  UserUrl: "https://markethubdata-production.up.railway.app/users",
+  cartUrl: 'https://markethubdata-production.up.railway.app/carts'
 };

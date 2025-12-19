@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { ApiUser } from '../../service/api-user';
 import Swal from 'sweetalert2';
@@ -15,17 +15,49 @@ import { Title } from '@angular/platform-browser';
 export class Register {
   ShowPass: boolean = false
   ShowConfPass: boolean = false
+  iti: any
   userRegisterForm: FormGroup
-  constructor(private _apiUser: ApiUser, private _Router: Router, private titleService:Title) {
+  constructor(private _apiUser: ApiUser, private _Router: Router, private titleService: Title) {
     this.userRegisterForm = new FormGroup({
       username: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z]{4,20}$')]),
       name: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z ]{4,25}$')]),
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email,
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|yahoo\.com)$/)
+      ]),
       password: new FormControl('', [Validators.required, Validators.pattern(/^(?=.*\d)[A-Za-z0-9]{8,25}$/)]),
       confirm_password: new FormControl('', [Validators.required]),
-      phone: new FormControl('', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]),
+      phone: new FormControl('', [Validators.required, this.phoneValidator.bind(this)]),
+      terms: new FormControl(false, Validators.requiredTrue)
     }, { validators: this.MatchPassword })
     this.titleService.setTitle("MarketHub - Register")
+  }
+
+  phoneValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value?.toString().trim();
+    if (!value) return { required: true };
+
+    // أرقام فقط
+    if (!/^\+?\d+$/.test(value)) {
+      return { invalidPhone: true };
+    }
+
+    const isEgypt =
+      value.startsWith('01') ||
+      value.startsWith('+201');
+
+    // 🇪🇬 رقم مصري فقط (11 رقم محلي)
+    const egyptPattern = /^(?:\+20|0)?1[0125][0-9]{8}$/;
+
+    // 🌍 رقم دولي
+    const generalPattern = /^\+?[1-9][0-9]{7,14}$/;
+
+    if (isEgypt) {
+      return egyptPattern.test(value) ? null : { invalidPhone: true };
+    }
+
+    return generalPattern.test(value) ? null : { invalidPhone: true };
   }
 
   MatchPassword(control: AbstractControl) {
@@ -57,6 +89,10 @@ export class Register {
 
   get phone() {
     return this.userRegisterForm.get('phone')
+  }
+
+  get terms() {
+    return this.userRegisterForm.get('terms')
   }
 
   TogglePass() {

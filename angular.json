@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "loginForm": {
+    "MarketHub": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -53,10 +53,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "loginForm:build:production"
+              "buildTarget": "MarketHub:build:production"
             },
             "development": {
-              "buildTarget": "loginForm:build:development"
+              "buildTarget": "MarketHub:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,5 +81,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "fdac01dc-7342-4d4b-9518-50a5888fe30f"
   }
 }
