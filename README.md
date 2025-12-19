@@ -1,6 +1,6 @@
 # MarketHub
 
-MarketHub is a modern web application built with **Angular 20**. It provides a dynamic and interactive user interface for managing user accounts, profiles, and authentication, making it easy for users to browse and manage their data efficiently.
+MarketHub is a modern web application built with **Angular 21**. It provides a dynamic and interactive user interface for managing user accounts, profiles, and authentication, making it easy for users to browse and manage their data efficiently.
 
 ## Features
 
