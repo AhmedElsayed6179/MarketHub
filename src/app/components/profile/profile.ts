@@ -267,33 +267,38 @@ export class Profile implements OnInit {
       confirmButtonColor: '#d33',
       confirmButtonText: 'Delete Account'
     }).then(result => {
-
       const currentUser = this._UserAuth.currentUserValue();
 
       if (result.isConfirmed) {
+        if (!currentUser) return;
 
-        if (result.value !== currentUser?.username) {
+        if (result.value !== currentUser.username) {
           Swal.fire('Error', 'Username does not match. Account not deleted.', 'error');
           return;
         }
 
-        // 🧹 مسح السلة أولاً
-        this._ApiCart.deleteCartByUserId(this.userId).subscribe(() => {
+        // مسح السلة أولاً
+        this._ApiCart.deleteCartByUserId(currentUser.id).subscribe({
+          next: () => {
+            // حذف الحساب
+            this._ApiUser.DeleteUser(currentUser.id).subscribe({
+              next: () => {
+                // مسح الـ state والـ localStorage
+                this._UserAuth.setCurrentUser(null);
+                this._UserAuth.tokenSubject.next(null);
+                this._UserAuth.authSubject.next(false);
+                this._UserAuth.currentUserSubject.next(null);
+                localStorage.removeItem('authToken');
 
-          // ❌ حذف الحساب
-          this._ApiUser.DeleteUser(this.userId).subscribe(() => {
+                // إعادة توجيه المستخدم
+                this._router.navigate(['/Home'])
 
-            Swal.fire(
-              'Deleted!',
-              'Your account and cart data have been permanently deleted.',
-              'success'
-            ).then(() => {
-              this._UserAuth.setCurrentUser(null);
-              this._router.navigate(['/Login']);
+                Swal.fire('Deleted!', 'Your account and cart data have been permanently deleted.', 'success');
+              },
+              error: () => Swal.fire('Error', 'Failed to delete account.', 'error')
             });
-
-          });
-
+          },
+          error: () => Swal.fire('Error', 'Failed to clear cart.', 'error')
         });
       }
     });

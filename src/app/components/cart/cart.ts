@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ICartItem } from '../../models/icart';
-import { CartService } from '../../service/cart.service';
-import { UserAuth } from '../../service/user-auth';
+import { BehaviorSubject, switchMap, map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
-import { BehaviorSubject } from 'rxjs';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
+import { CartService } from '../../service/cart.service';
+import { UserAuth } from '../../service/user-auth';
+import { ApiProducts } from '../../service/api-products';
+import { ICartItem, CartViewItem } from '../../models/icart';
 
 @Component({
   selector: 'app-cart',
@@ -16,20 +17,23 @@ import { RouterLink } from "@angular/router";
   styleUrls: ['./cart.css'],
 })
 export class Cart implements OnInit {
-  cartItems$ = new BehaviorSubject<ICartItem[]>([]);
+
+  cartItems$ = new BehaviorSubject<CartViewItem[]>([]);
   userId!: number;
-  username: string = '';
-  totalPrice: number = 0;
+  username = '';
+  totalPrice = 0;
 
   constructor(
     private _CartService: CartService,
     private _UserAuth: UserAuth,
+    private _ApiProducts: ApiProducts,
     private titleService: Title
   ) { }
 
   ngOnInit(): void {
     this._UserAuth.currentUser$.subscribe(user => {
       if (!user) return;
+
       this.userId = user.id;
       this.username = user.username;
 
@@ -37,67 +41,95 @@ export class Cart implements OnInit {
     });
   }
 
+  // ===============================
+  // تحميل الكارت (دمج cart + products)
+  // ===============================
   loadCart() {
-    this._CartService.getUserCart(this.userId).subscribe(cart => {
-      this.cartItems$.next(cart.items);
-      this.updateTotals(cart.items);
+    this._CartService.getUserCart(this.userId).pipe(
+      switchMap(cart =>
+        this._ApiProducts.getallProducts().pipe(
+          map(products =>
+            cart.items.map(item => {
+              const product = products.find(p => p.id === item.productId)!;
+              return {
+                productId: item.productId,
+                title: product.title,
+                image: product.image,
+                price: product.price,
+                quantity: item.quantity
+              } as CartViewItem;
+            })
+          )
+        )
+      )
+    ).subscribe(viewItems => {
+      this.cartItems$.next(viewItems);
+      this.updateTotals(viewItems);
     });
   }
 
-  updateTotals(items: ICartItem[]) {
-    const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-    this.totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    this.titleService.setTitle(`Cart (${itemCount}) - ${this.username}`);
+  // ===============================
+  updateTotals(items: CartViewItem[]) {
+    const count = items.reduce((s, i) => s + i.quantity, 0);
+    this.totalPrice = items.reduce((s, i) => s + i.price * i.quantity, 0);
+    this.titleService.setTitle(`Cart (${count}) - ${this.username}`);
   }
 
-  updateCart(items: ICartItem[]) {
-    this._CartService.updateUserCart(this.userId, items).subscribe({
+  // ===============================
+  // تحديث الكارت (تحويل View → API)
+  // ===============================
+  updateCart(viewItems: CartViewItem[]) {
+
+    const apiItems: ICartItem[] = viewItems.map(i => ({
+      productId: i.productId,
+      quantity: i.quantity
+    }));
+
+    this._CartService.updateUserCart(this.userId, apiItems).subscribe({
       next: () => {
-        this.cartItems$.next(items);
-        this.updateTotals(items);
+        this.cartItems$.next(viewItems);
+        this.updateTotals(viewItems);
       },
       error: err => console.error(err)
     });
   }
 
-  increaseQuantity(item: ICartItem, items: ICartItem[]) {
-    item.quantity += 1;
-    this.updateCart(items);
+  increase(item: CartViewItem) {
+    item.quantity++;
+    this.updateCart(this.cartItems$.value);
   }
 
-  decreaseQuantity(item: ICartItem, items: ICartItem[]) {
+  decrease(item: CartViewItem) {
     if (item.quantity > 1) {
-      item.quantity -= 1;
-      this.updateCart(items);
+      item.quantity--;
+      this.updateCart(this.cartItems$.value);
     }
   }
 
-  removeItem(item: ICartItem, items: ICartItem[]) {
+  remove(item: CartViewItem) {
     Swal.fire({
-      title: 'Are you sure?',
-      text: `Remove ${item.title} from cart?`,
+      title: 'Remove item?',
+      text: item.title,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes',
       cancelButtonText: 'No'
-    }).then(result => {
-      if (result.isConfirmed) {
-        const updatedItems = items.filter(i => i.productId !== item.productId);
-        this.updateCart(updatedItems);
+    }).then(res => {
+      if (res.isConfirmed) {
+        const updated = this.cartItems$.value.filter(i => i.productId !== item.productId);
+        this.updateCart(updated);
         Swal.fire({
+          icon: 'success',
           title: 'Removed!',
           text: `${item.title} has been removed from your cart.`,
-          icon: 'success',
-          confirmButtonText: 'OK'
+          timer: 1500,
+          showConfirmButton: false
         });
       }
     });
   }
 
   clearCart() {
-    const items = this.cartItems$.value;
-    if (!items.length) return;
-
     Swal.fire({
       title: 'Clear Cart?',
       text: 'All items will be removed!',
@@ -105,24 +137,17 @@ export class Cart implements OnInit {
       showCancelButton: true,
       confirmButtonText: 'Yes',
       cancelButtonText: 'No'
-    }).then(result => {
-      if (result.isConfirmed) {
+    }).then(res => {
+      if (res.isConfirmed) {
         this.updateCart([]);
         Swal.fire({
+          icon: 'success',
           title: 'Cleared!',
           text: 'All items have been removed from your cart.',
-          icon: 'success',
-          confirmButtonText: 'OK'
+          timer: 1500,
+          showConfirmButton: false
         });
       }
     });
   }
-
-  getTotal(items: ICartItem[]): number {
-    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  }
 }
-
-
-
-

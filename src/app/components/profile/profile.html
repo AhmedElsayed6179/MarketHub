@@ -30,11 +30,7 @@
                 <p>Username Is Required</p>
                 }
                 @if (username?.errors?.['pattern']) {
-<<<<<<< HEAD
-                <p>Username must be 4-10 characters long and contain no spaces</p>
-=======
                 <p>Username Must Be Between 4 to 10 characters long and contain no spaces</p>
->>>>>>> 8eb5cc753b90bc36b0fd5468213d3f5f289303d2
                 }
               </div>
               }
@@ -62,15 +58,19 @@
               <label for="email" class="form-label">Email Address :</label>
               <input type="email" formControlName="email" name="email" placeholder="Enter Your Email"
                 class="form-control w-100 p-2 shadow-none" id="email" />
-              @if (email?.touched && email?.invalid) {
+              @if (email?.touched && email?.invalid)
+              {
               <div class="text-danger text-center mt-2">
-                @if (email?.errors?.['required']) {
+                @if (email?.errors?.['required'])
+                {
                 <p>Email Address Is Required</p>
                 }
-                @if (email?.errors?.['email'] && email?.value) {
+                @else if (email?.errors?.['email'] && email?.value)
+                {
                 <p>Invalid Email Address</p>
                 }
-                @if (email?.errors?.['pattern']) {
+                @else if (email?.errors?.['pattern'])
+                {
                 <p>Email must be from gmail.com, outlook.com, or yahoo.com</p>
                 }
               </div>

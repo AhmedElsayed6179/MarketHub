@@ -39,15 +39,15 @@
             <td>
               <div class="d-flex align-items-center">
                 <button class="btn btn-outline-secondary btn-sm me-2"
-                  (click)="decreaseQuantity(item, cartItems)">-</button>
+                  (click)="decrease(item)">-</button>
                 <span class="mx-1">{{ item.quantity }}</span>
                 <button class="btn btn-outline-secondary btn-sm ms-2"
-                  (click)="increaseQuantity(item, cartItems)">+</button>
+                  (click)="increase(item)">+</button>
               </div>
             </td>
             <td>${{ (item.price * item.quantity) | number:'1.2-2' }}</td>
             <td>
-              <button class="btn btn-danger btn-sm" (click)="removeItem(item, cartItems)">
+              <button class="btn btn-danger btn-sm" (click)="remove(item)">
                 Delete
               </button>
             </td>

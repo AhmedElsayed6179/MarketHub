@@ -51,7 +51,9 @@ export class Details implements OnInit {
         return this._ProductsService.getProductById(this.currentId);
       }),
       tap(product => {
-        this.titleService.setTitle(`MarketHub - ${product.title}`);
+        if (product) {
+          this.titleService.setTitle(`MarketHub - ${product.title}`);
+        }
       })
     );
   }
@@ -79,9 +81,6 @@ export class Details implements OnInit {
 
       const item: ICartItem = {
         productId: product.id,
-        title: product.title,
-        image: product.image,
-        price: product.price,
         quantity: 1
       };
 
@@ -93,23 +92,20 @@ export class Details implements OnInit {
             title: 'Adding product...',
             html: 'Please wait',
             allowOutsideClick: false,
-            didOpen: () => {
-              Swal.showLoading();
-            }
+            didOpen: () => Swal.showLoading()
           });
 
           setTimeout(() => {
             Swal.fire({
               icon: 'success',
               title: 'Added!',
-              text: `${item.title} added to your cart.`,
+              text: `${product.title} added to your cart.`,
               timer: 1500,
               showConfirmButton: false
             });
-          }, 1000);
+          }, 800);
         },
-        error: err => {
-          console.error(err);
+        error: () => {
           Swal.fire('Error', 'Failed to add product to cart.', 'error');
         }
       });

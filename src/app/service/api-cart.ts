@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
 import { ICart, ICartItem } from '../models/icart';
 import { environment } from '../environments/environment.development';
 import { PlaceOrder } from '../models/place-order';
@@ -62,21 +62,21 @@ export class ApiCart {
   deleteCartByUserId(userId: number): Observable<void> {
     return this.GetCartById(userId).pipe(
       take(1),
-      switchMap((carts) => {
-        if (carts.length === 0) {
-          return new Observable<void>(observer => {
-            observer.next();
-            observer.complete();
-          });
+      switchMap(carts => {
+        if (!carts.length) {
+          // لو مفيش أي كارت، نرجع void فورًا
+          return of(void 0);
         }
 
         const deleteRequests = carts.map(cart =>
           this._HttpClient.delete(`${environment.cartUrl}/${cart.id}`)
         );
 
-        return forkJoin(deleteRequests).pipe(map(() => void 0));
+        // forkJoin يرجع void بعد انتهاء كل الطلبات
+        return forkJoin(deleteRequests).pipe(
+          map(() => void 0)
+        );
       })
     );
   }
-
 }

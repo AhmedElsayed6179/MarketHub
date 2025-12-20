@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { CartService } from '../../service/cart.service';
 import { UserAuth } from '../../service/user-auth';
-import { ICartItem } from '../../models/icart';
+import { CartViewItem, ICartItem } from '../../models/icart';
 import { PlaceOrder } from '../../models/place-order';
-import { Observable, of, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { Title } from '@angular/platform-browser';
+import { ApiProducts } from '../../service/api-products';
 
 @Component({
   selector: 'app-checkout',
@@ -22,9 +23,9 @@ export class Checkout implements OnInit {
   cartItems: ICartItem[] = [];
   totalPrice: number = 0;
   userId!: number;
-  cartItems$!: Observable<ICartItem[]>;
+  cartItems$!: Observable<CartViewItem[]>;
 
-  constructor(private _CartService: CartService, private _UserAuth: UserAuth, private titleService: Title) {
+  constructor(private _CartService: CartService, private _UserAuth: UserAuth, private _ApiProducts: ApiProducts, private titleService: Title) {
     this.checkoutForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
@@ -45,10 +46,29 @@ export class Checkout implements OnInit {
       this.userId = user.id;
 
       this.cartItems$ = this._CartService.getUserCart(this.userId).pipe(
-        switchMap(cart => {
-          this.totalPrice = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-          return of(cart.items);
-        })
+        switchMap(cart =>
+          this._ApiProducts.getallProducts().pipe(
+            map(products => {
+              const items = cart.items.map(item => {
+                const product = products.find(p => p.id === item.productId)!;
+                return {
+                  productId: item.productId,
+                  title: product.title,
+                  image: product.image,
+                  price: product.price,
+                  quantity: item.quantity
+                };
+              });
+
+              this.totalPrice = items.reduce(
+                (sum, i) => sum + i.price * i.quantity,
+                0
+              );
+
+              return items;
+            })
+          )
+        )
       );
     });
   }

@@ -10,9 +10,9 @@ import { ApiUser } from './api-user';
   providedIn: 'root',
 })
 export class UserAuth {
-  private authSubject = new BehaviorSubject<boolean>(false);
-  private currentUserSubject = new BehaviorSubject<IUser | null>(null);
-  private tokenSubject = new BehaviorSubject<string | null>(null);
+  public authSubject = new BehaviorSubject<boolean>(false);
+  public currentUserSubject = new BehaviorSubject<IUser | null>(null);
+  public tokenSubject = new BehaviorSubject<string | null>(null);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   isLoggedIn$ = this.authSubject.asObservable();

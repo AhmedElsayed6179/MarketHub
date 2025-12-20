@@ -71,9 +71,6 @@ export class Products implements OnInit {
 
       const item: ICartItem = {
         productId: product.id,
-        title: product.title,
-        image: product.image,
-        price: product.price,
         quantity: 1
       };
 
@@ -95,7 +92,7 @@ export class Products implements OnInit {
             Swal.fire({
               icon: 'success',
               title: 'Added!',
-              text: `${item.title} added to your cart.`,
+              text: `${product.title} added to your cart.`,
               timer: 1500,
               showConfirmButton: false
             });
