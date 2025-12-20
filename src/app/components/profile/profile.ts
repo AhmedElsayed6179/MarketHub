@@ -6,6 +6,7 @@ import { IUser } from '../../models/iuser';
 import { UserAuth } from '../../service/user-auth';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { ApiCart } from '../../service/api-cart';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +22,7 @@ export class Profile implements OnInit {
   ShowConfPass: boolean = false
 
   profileForm = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z]{4,20}$')]),
+    username: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z0-9]{4,20}$')]),
     name: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z ]{4,25}$')]),
     email: new FormControl('', [
       Validators.required,
@@ -36,7 +37,7 @@ export class Profile implements OnInit {
     confirm_password: new FormControl('', [Validators.required]),
   }, { validators: this.MatchPassword });
 
-  constructor(private _ApiUser: ApiUser, private _UserAuth: UserAuth, private Title: Title, private _router: Router) {
+  constructor(private _ApiUser: ApiUser, private _UserAuth: UserAuth, private Title: Title, private _router: Router, private _ApiCart: ApiCart) {
     this._UserAuth.currentUser$.subscribe(user => {
       this.guestname = user?.username || '';
       this.Title.setTitle(`MarketHub - ${this.guestname}`)
@@ -266,20 +267,33 @@ export class Profile implements OnInit {
       confirmButtonColor: '#d33',
       confirmButtonText: 'Delete Account'
     }).then(result => {
+
       const currentUser = this._UserAuth.currentUserValue();
+
       if (result.isConfirmed) {
-        // تحقق من كتابة الاسم الصحيح
+
         if (result.value !== currentUser?.username) {
           Swal.fire('Error', 'Username does not match. Account not deleted.', 'error');
           return;
         }
 
-        // حذف الحساب
-        this._ApiUser.DeleteUser(this.userId).subscribe(() => {
-          Swal.fire('Deleted!', 'Your account has been permanently deleted.', 'success').then(() => {
-            this._UserAuth.setCurrentUser(null);
-            this._router.navigate(['/Login']);
+        // 🧹 مسح السلة أولاً
+        this._ApiCart.deleteCartByUserId(this.userId).subscribe(() => {
+
+          // ❌ حذف الحساب
+          this._ApiUser.DeleteUser(this.userId).subscribe(() => {
+
+            Swal.fire(
+              'Deleted!',
+              'Your account and cart data have been permanently deleted.',
+              'success'
+            ).then(() => {
+              this._UserAuth.setCurrentUser(null);
+              this._router.navigate(['/Login']);
+            });
+
           });
+
         });
       }
     });

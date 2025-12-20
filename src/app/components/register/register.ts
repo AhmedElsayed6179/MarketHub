@@ -19,7 +19,7 @@ export class Register {
   userRegisterForm: FormGroup
   constructor(private _apiUser: ApiUser, private _Router: Router, private titleService: Title) {
     this.userRegisterForm = new FormGroup({
-      username: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z]{4,20}$')]),
+      username: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z0-9]{4,20}$')]),
       name: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z ]{4,25}$')]),
       email: new FormControl('', [
         Validators.required,

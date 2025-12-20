@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, switchMap, take } from 'rxjs';
+import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
 import { ICart, ICartItem } from '../models/icart';
 import { environment } from '../environments/environment.development';
 import { PlaceOrder } from '../models/place-order';
@@ -58,4 +58,25 @@ export class ApiCart {
   placeOrder(order: PlaceOrder): Observable<PlaceOrder> {
     return this._HttpClient.post<PlaceOrder>(`${environment.orderUrl}`, order);
   }
+
+  deleteCartByUserId(userId: number): Observable<void> {
+    return this.GetCartById(userId).pipe(
+      take(1),
+      switchMap((carts) => {
+        if (carts.length === 0) {
+          return new Observable<void>(observer => {
+            observer.next();
+            observer.complete();
+          });
+        }
+
+        const deleteRequests = carts.map(cart =>
+          this._HttpClient.delete(`${environment.cartUrl}/${cart.id}`)
+        );
+
+        return forkJoin(deleteRequests).pipe(map(() => void 0));
+      })
+    );
+  }
+
 }
