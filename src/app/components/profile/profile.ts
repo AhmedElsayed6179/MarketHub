@@ -21,7 +21,7 @@ export class Profile implements OnInit {
   ShowConfPass: boolean = false
 
   profileForm = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z]{4,20}$')]),
+    username: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z0-9]{4,20}$')]),
     name: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z ]{4,25}$')]),
     email: new FormControl('', [
       Validators.required,
