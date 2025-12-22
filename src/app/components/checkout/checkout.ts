@@ -60,10 +60,10 @@ export class Checkout implements OnInit {
                 };
               });
 
-              this.totalPrice = items.reduce(
-                (sum, i) => sum + i.price * i.quantity,
-                0
-              );
+              this.totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+              // تحديث المتغير المحلي
+              this.cartItems = items;
 
               return items;
             })
