@@ -119,14 +119,36 @@ export class Checkout implements OnInit {
       createdAt: new Date()
     };
 
+    // رسالة تحميل
+    Swal.fire({
+      title: 'Processing your order...',
+      html: 'Please wait while we place your order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     this._CartService.placeOrder(order).subscribe({
       next: () => {
-        Swal.fire('Success', 'Your order has been placed!', 'success');
-        this.cartItems = [];
-        this.totalPrice = 0;
-        this.checkoutForm.reset({ paymentMethod: 'cod' });
+        // تحويل SweetAlert إلى رسالة نجاح
+        Swal.fire({
+          title: 'Success!',
+          html: 'Your order has been placed successfully.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          // إعادة تحميل الصفحة بعد الضغط على OK
+          window.location.reload();
+          // تفريغ الكارت وإعادة تهيئة الفورم
+          this.cartItems = [];
+          this.totalPrice = 0;
+          this.checkoutForm.reset({ paymentMethod: 'cod' });
+        });
       },
-      error: () => Swal.fire('Error', 'Something went wrong. Please try again.', 'error')
+      error: () => {
+        Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+      }
     });
   }
 }
