@@ -65,20 +65,23 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Expiry Date</label>
-              <input type="text" maxlength="5" formControlName="expiry" class="form-control form-control-lg" placeholder="MM/YY" />
+              <input type="text" maxlength="5" formControlName="expiry" class="form-control form-control-lg"
+                placeholder="MM/YY" />
             </div>
             <div class="col-md-6">
               <label class="form-label">CVV</label>
-              <input type="text" maxlength="3" formControlName="cvv" class="form-control form-control-lg" placeholder="123" />
+              <input type="text" maxlength="3" formControlName="cvv" class="form-control form-control-lg"
+                placeholder="123" />
             </div>
             <div class="col-12">
               <label class="form-label">Cardholder Name</label>
-              <input type="text" formControlName="cardName" class="form-control form-control-lg" placeholder="Full Name" />
+              <input type="text" formControlName="cardName" class="form-control form-control-lg"
+                placeholder="Full Name" />
             </div>
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-100 mb-4" [disabled]="cartItems.length === 0">
+        <button type="submit" class="btn btn-primary btn-lg w-100 mb-4" [disabled]="(cartItems$ | async)?.length === 0">
           Checkout Now 🛒
         </button>
       </form>
