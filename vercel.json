@@ -3,9 +3,10 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static"
+      "use": "@vercel/static-build"
     }
   ],
+  "outputDirectory": "dist/market-hub",
   "routes": [
     {
       "src": "/(.*)",
