@@ -16,6 +16,7 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "outputPath": "app/browser",
+            "baseHref": "/SayHello/",
             "assets": [
               {
                 "glob": "**/*",
@@ -79,6 +80,9 @@
               "src/styles.css"
             ]
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
