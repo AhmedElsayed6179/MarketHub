@@ -40,6 +40,7 @@
     "@angular/cli": "^21.0.3",
     "@angular/compiler-cli": "^21.0.4",
     "@types/jasmine": "~5.1.0",
+    "@vercel/static-build": "^2.8.23",
     "angular-cli-ghpages": "^3.0.2",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
