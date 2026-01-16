@@ -25,7 +25,7 @@ export class Home {
     this._UserAuth.currentUser$.subscribe(user => {
       this.username = user?.username || '';
     });
-    this.titleService.setTitle("MarketHub - Home")
+    this.titleService.setTitle("MarketHub")
     this.contactForm = new FormGroup({
       name: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
