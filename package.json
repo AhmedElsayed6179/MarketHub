@@ -41,12 +41,15 @@
     "@angular/compiler-cli": "^21.0.4",
     "@types/jasmine": "~5.1.0",
     "angular-cli-ghpages": "^3.0.2",
+    "glob": "^13.0.0",
+    "inflight": "^1.0.6",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "rimraf": "^6.1.2",
     "typescript": "~5.9.2"
   }
 }
