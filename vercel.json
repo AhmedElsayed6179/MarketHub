@@ -6,11 +6,8 @@
       "use": "@vercel/static-build"
     }
   ],
-  "outputDirectory": "dist/market-hub",
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "outputDirectory": "dist/MarketHub"
 }
