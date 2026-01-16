@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/MarketHub",
+    "public": "dist/MarketHub/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
