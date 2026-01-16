@@ -16,7 +16,7 @@ import { UserResolver } from './service/user-resolver';
 
 export const routes: Routes = [
   { path: '', component: Home, resolve: { currentUser: UserResolver } },
-  { path: 'Home', redirectTo: '', pathMatch: 'full' },
+  { path: "Home", redirectTo: '', pathMatch: 'full' },
   { path: "Login", component: Login, canActivate: [LoggedInGuard] },
   { path: "Products", component: Products, resolve: { currentUser: UserResolver } },
   { path: "Terms", component: Terms },
