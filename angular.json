@@ -16,7 +16,6 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "outputPath": "app/browser",
-            "baseHref": "/MarketHub/",
             "assets": [
               {
                 "glob": "**/*",
