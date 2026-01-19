@@ -9,6 +9,7 @@ import { UserAuth } from '../../service/user-auth';
   styleUrl: './footer.css',
 })
 export class Footer {
+  today = new Date();
   isLoggedIn: boolean = false
   constructor(private _UserAuth: UserAuth) {
     this._UserAuth.isLoggedIn$.subscribe(status => {
