@@ -12,15 +12,10 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav ms-auto align-items-lg-center">
         <li class="nav-item mx-2">
-  <a
-    class="nav-link"
-    routerLink="/"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }"
-  >
-    Home
-  </a>
-</li>
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            Home
+          </a>
+        </li>
 
         <li class="nav-item mx-2">
           <a class="nav-link" routerLink="/Products" routerLinkActive="active">Products</a>
@@ -28,7 +23,8 @@
 
         @if (!IsloggedIn) {
         <li class="nav-item mx-2">
-          <a class="nav-link btn btn-outline-danger px-3 py-1 rounded-pill" routerLinkActive="active" routerLink="/Login">Login</a>
+          <a class="nav-link btn btn-outline-danger px-3 py-1 rounded-pill" routerLinkActive="active"
+            routerLink="/Login">Login</a>
         </li>
         }
 
