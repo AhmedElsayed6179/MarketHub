@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { UserAuth } from '../../service/user-auth';
 import { CartService } from '../../service/cart.service';
@@ -12,10 +12,11 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './navbar.css',
 })
 
-export class Navbar {
+export class Navbar implements OnInit {
   IsloggedIn: boolean = false
   username?: string | null;
   cartCount$!: Observable<number>;
+  showDownloadLink = false;
 
   constructor(private _UserAuth: UserAuth, private _CartService: CartService) {
     this._UserAuth.isLoggedIn$.subscribe(status => {
@@ -36,6 +37,19 @@ export class Navbar {
         );
       })
     );
+
+    const ua = navigator.userAgent || navigator.vendor || '';
+
+    const isApk =
+      /wv/i.test(ua) ||
+      /Version\/[\d.]+.*Chrome/i.test(ua) ||
+      /Median/i.test(ua) ||
+      (window as any).cordova !== undefined ||
+      (window as any).Capacitor !== undefined;
+
+    const isMobile = /Android|iPhone|iPad|iPod|IEMobile|BlackBerry|Opera Mini/i.test(ua);
+
+    this.showDownloadLink = isMobile && !isApk;
   }
 
   @HostListener('window:scroll', [])

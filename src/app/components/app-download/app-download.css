@@ -1,0 +1,172 @@
+.home-bg {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 15px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(270deg, #a1c4fd, #c2e9fb, #f0fdfa, #d9f0ff);
+  background-size: 600% 600%;
+  animation: gradientMove 17s ease infinite;
+  color: #111;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Animation */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.home-bg .section-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #0d1b2a;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  transition: color 0.3s ease;
+}
+
+.home-bg .section-title i {
+  font-size: 2.2rem;
+  color: #2563eb;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.home-bg .section-title:hover i {
+  transform: translateY(-3px) rotate(-10deg);
+  color: #1e40af;
+}
+
+.home-bg .section-desc {
+  font-size: 1.2rem;
+  margin-bottom: 50px;
+  color: #1e3a8a;
+}
+
+.home-bg .app-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 35px 25px;
+  width: 220px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.home-bg .app-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.home-bg .app-card i {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #2563eb;
+}
+
+.home-bg .app-card h5 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #0d1b2a;
+}
+
+.home-bg .app-card .btn {
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 50px;
+  background: #2563eb;
+  border: none;
+  color: #fff;
+}
+
+.home-bg .app-card .btn:hover {
+  background: #1e40af;
+}
+
+/* iOS Coming Soon */
+.home-bg .ios-coming {
+  font-weight: 600;
+  color: #f59e0b;
+  font-size: 1rem;
+}
+
+
+.home-bg .ios-instructions {
+  margin-top: 40px;
+  background: rgba(0, 0, 0, 0.1);
+  color: #0d1b2a;
+  font-size: 0.95rem;
+  padding: 15px 20px;
+  border-radius: 15px;
+}
+
+/* ============================= */
+/* Responsive */
+@media (max-width: 992px) {
+  .home-bg .section-title {
+    font-size: 2.3rem;
+    gap: 10px;
+  }
+
+  .home-bg .section-title i {
+    font-size: 2rem;
+  }
+
+  .home-bg .section-desc {
+    font-size: 1.1rem;
+  }
+
+  .home-bg .app-card {
+    width: 200px;
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .home-bg {
+    padding: 40px 10px;
+  }
+
+  .home-bg .section-title {
+    font-size: 1.8rem;
+    gap: 8px;
+  }
+
+  .home-bg .section-title i {
+    font-size: 1.6rem;
+  }
+
+  .home-bg .section-desc {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+
+  .home-bg .app-card {
+    width: 180px;
+    padding: 25px 15px;
+  }
+
+  .home-bg .app-card i {
+    font-size: 2.5rem;
+  }
+}

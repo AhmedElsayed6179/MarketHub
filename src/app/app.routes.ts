@@ -13,6 +13,8 @@ import { Terms } from './components/terms/terms';
 import { ForgetPass } from './components/forget-pass/forget-pass';
 import { Profile } from './components/profile/profile';
 import { UserResolver } from './service/user-resolver';
+import { AppDownload } from './components/app-download/app-download';
+import { WebOnlyGuard } from './guards/web-only-guard-guard';
 
 export const routes: Routes = [
   { path: '', component: Home, resolve: { currentUser: UserResolver } },
@@ -20,6 +22,7 @@ export const routes: Routes = [
   { path: "Login", component: Login, canActivate: [LoggedInGuard] },
   { path: "Products", component: Products, resolve: { currentUser: UserResolver } },
   { path: "Terms", component: Terms },
+  { path: "App-Download", component: AppDownload, canActivate: [WebOnlyGuard] },
   { path: "Profile", component: Profile, canActivate: [AuthGuard], resolve: { currentUser: UserResolver } },
   { path: "ForgotPassword", component: ForgetPass, canActivate: [LoggedInGuard] },
   { path: "Checkout", component: Checkout, canActivate: [AuthGuard], resolve: { currentUser: UserResolver } },
