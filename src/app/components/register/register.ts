@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { ApiUser } from '../../service/api-user';
@@ -12,7 +12,7 @@ import { Title } from '@angular/platform-browser';
   styleUrl: './register.css',
 })
 
-export class Register {
+export class Register implements OnInit {
   ShowPass: boolean = false
   ShowConfPass: boolean = false
   iti: any
@@ -32,6 +32,16 @@ export class Register {
       terms: new FormControl(false, Validators.requiredTrue)
     }, { validators: this.MatchPassword })
     this.titleService.setTitle("MarketHub - Register")
+  }
+
+  ngOnInit(): void {
+    const bg = document.querySelector('.Image-Background') as HTMLElement;
+
+    const img = new Image();
+    img.src = '/images/login.jpg';
+    img.onload = () => {
+      bg.style.backgroundImage = `url('${img.src}')`;
+    };
   }
 
   phoneValidator(control: AbstractControl): ValidationErrors | null {

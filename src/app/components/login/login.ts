@@ -51,6 +51,14 @@ export class Login implements OnInit {
         RememberMe: true
       })
     }
+
+    const bg = document.querySelector('.Image-Background') as HTMLElement;
+
+    const img = new Image();
+    img.src = '/images/login.jpg';
+    img.onload = () => {
+      bg.style.backgroundImage = `url('${img.src}')`;
+    };
   }
 
   login() {
