@@ -41,9 +41,6 @@ export class Cart implements OnInit {
     });
   }
 
-  // ===============================
-  // تحميل الكارت (دمج cart + products)
-  // ===============================
   loadCart() {
     this._CartService.getUserCart(this.userId).pipe(
       switchMap(cart =>
