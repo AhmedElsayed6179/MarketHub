@@ -24,11 +24,10 @@ export class UserAuth {
     if (token) {
       this.tokenSubject.next(token);
       this.authSubject.next(true);
-      this.loadCurrentUserFromAPI().subscribe(); // تحميل البيانات فوراً
+      this.loadCurrentUserFromAPI().subscribe();
     }
   }
 
-  /** تسجيل الدخول */
   Login(username: string, password: string) {
     this.loadingSubject.next(true);
 
@@ -54,7 +53,6 @@ export class UserAuth {
     });
   }
 
-  /** تسجيل الخروج */
   Logout() {
     Swal.fire({
       title: 'Are you sure?',
@@ -69,7 +67,7 @@ export class UserAuth {
         this.tokenSubject.next(null);
         this.authSubject.next(false);
         this.currentUserSubject.next(null);
-        this.router.navigateByUrl('/Home');
+        this.router.navigateByUrl('/Home').then(() => { window.location.reload(); });
         Swal.fire('Logged Out!', 'You have been logged out successfully.', 'success');
       }
     });
@@ -80,22 +78,18 @@ export class UserAuth {
     return !!this.tokenSubject.value;
   }
 
-  /** الحصول على التوكن الحالي */
   getToken(): string | null {
     return this.tokenSubject.value;
   }
 
-  /** القيمة الحالية للمستخدم فوراً */
   currentUserValue(): IUser | null {
     return this.currentUserSubject.value;
   }
 
-  /** تعيين المستخدم في state */
   setCurrentUser(user: IUser | null) {
     this.currentUserSubject.next(user);
   }
 
-  /** جلب المستخدم من API بناءً على التوكن */
   loadCurrentUserFromAPI(): Observable<IUser | null> {
     const token = this.tokenSubject.value;
     if (!token) return of(null);
