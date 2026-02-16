@@ -152,6 +152,7 @@ export class Register implements OnInit {
               cancelButtonText: "OK",
             })
             this._Router.navigateByUrl("/Login")
+            this.userRegisterForm.reset();
           },
           error: () => {
             Swal.fire({
@@ -163,7 +164,6 @@ export class Register implements OnInit {
           }
         })
       })
-      this.userRegisterForm.reset();
     } else {
       Swal.fire({
         title: 'Invalid Form',
