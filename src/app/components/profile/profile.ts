@@ -40,7 +40,7 @@ export class Profile implements OnInit {
   constructor(private _ApiUser: ApiUser, private _UserAuth: UserAuth, private Title: Title, private _router: Router, private _ApiCart: ApiCart) {
     this._UserAuth.currentUser$.subscribe(user => {
       this.guestname = user?.username || '';
-      this.Title.setTitle(`MarketHub - ${this.guestname}`)
+      this.Title.setTitle(`MarketHub - Profile`)
     });
   }
 
