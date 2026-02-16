@@ -10,7 +10,7 @@
 }
 
 .profile-form.show {
-  max-height: 2000px; /* رقم كبير آمن */
+  max-height: 2000px;
   opacity: 1;
   transform: translateY(0);
 }

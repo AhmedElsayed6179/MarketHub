@@ -9,7 +9,7 @@
 }
 
 .footer-icons a[title="Login"]:hover i {
-  color: #ffc107;
+  color: #28a745;
 }
 
 .footer-icons a[title="Logout"]:hover i {
@@ -20,8 +20,16 @@
   color: #4267B2;
 }
 
-.footer-icons a[title="Twitter"]:hover i {
-  color: #1DA1F2;
+.footer-icons a[title="X (formerly Twitter)"]:hover i {
+  color: #cccccc;
+}
+
+.footer-icons a[title="Instagram"]:hover i {
+  color: #E1306C;
+}
+
+.footer-icons a[title="TikTok"]:hover i {
+  color: #ff0050;
 }
 
 .footer {
