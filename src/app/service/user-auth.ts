@@ -67,8 +67,16 @@ export class UserAuth {
         this.tokenSubject.next(null);
         this.authSubject.next(false);
         this.currentUserSubject.next(null);
-        this.router.navigateByUrl('/Home').then(() => { window.location.reload(); });
-        Swal.fire('Logged Out!', 'You have been logged out successfully.', 'success');
+        this.router.navigateByUrl('/Home');
+
+Swal.fire({
+  title: 'Logged Out!',
+  text: 'You have been logged out successfully.',
+  icon: 'success',
+  confirmButtonText: 'OK'
+}).then(() => {
+  window.location.reload();
+});
       }
     });
   }
