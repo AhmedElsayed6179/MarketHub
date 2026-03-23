@@ -33,7 +33,9 @@
         <ul class="footer-nav">
           <li><a routerLink="/Home">Home</a></li>
           <li><a routerLink="/Products">Products</a></li>
+          @if(showDownloadLink){
           <li><a routerLink="/App-Download">Download App</a></li>
+          }
           <li><a routerLink="/Terms">Terms & Conditions</a></li>
         </ul>
       </div>
