@@ -315,17 +315,74 @@
 @media (max-width: 768px) {
   .profile-layout {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .profile-avatar-card {
     position: static;
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  .profile-avatar {
+    width: 76px;
+    height: 76px;
+  }
+
+  .profile-name {
+    font-size: 1rem;
+  }
+
+  .profile-sidebar-actions {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .sidebar-btn-edit,
+  .sidebar-btn-delete {
+    flex: 1;
+    font-size: 0.82rem;
+    padding: 9px 8px;
+  }
+
+  .profile-form-card {
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+
+  .profile-form-header h5 {
+    font-size: 1rem;
   }
 
   .profile-form-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
   }
 
-  .profile-form-card {
-    padding: 24px 18px;
+  .pf-field.full-col {
+    grid-column: 1;
+  }
+
+  .pf-input {
+    padding: 10px 12px 10px 34px;
+    font-size: 0.88rem;
+  }
+
+  .pf-submit-btn {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+
+  .profile-placeholder {
+    padding: 32px 16px;
+  }
+
+  .profile-placeholder i {
+    font-size: 2rem;
+  }
+
+  .profile-placeholder p {
+    font-size: 0.85rem;
   }
 }
