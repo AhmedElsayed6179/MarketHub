@@ -1,0 +1,69 @@
+<div class="auth-page Image-Background">
+  <div class="auth-overlay"></div>
+
+  <div class="auth-card">
+
+    <!-- Header -->
+    <div class="auth-card-header">
+      <div class="auth-logo">
+        <img src="market.png" alt="MarketHub" />
+      </div>
+      <h2 class="auth-title">Welcome back!</h2>
+      <p class="auth-subtitle">Sign in to your MarketHub account</p>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="userLogin" (submit)="login()" class="auth-form">
+
+      <div class="auth-field">
+        <label for="Username">Username or Email</label>
+        <div class="field-wrap">
+          <i class="fas fa-user field-icon"></i>
+          <input type="text" formControlName="username" placeholder="Enter username or email" class="auth-input"
+            name="username" id="Username" />
+        </div>
+        @if (username?.touched && username?.invalid) {
+        <span class="auth-error">
+          @if (username?.errors?.['required']) { Username or Email is Required }
+        </span>
+        }
+      </div>
+
+      <div class="auth-field">
+        <label for="password">Password</label>
+        <div class="field-wrap">
+          <i class="fas fa-lock field-icon"></i>
+          <input [type]="showPass ? 'text' : 'password'" formControlName="password" placeholder="Enter your password"
+            class="auth-input auth-input-padded" name="password" id="password" />
+          <button type="button" class="toggle-pass" (click)="TogglePass()">
+            <i class="fas" [class.fa-eye]="!showPass" [class.fa-eye-slash]="showPass"></i>
+          </button>
+        </div>
+        @if (password?.touched && password?.invalid) {
+        <span class="auth-error">
+          @if (password?.errors?.['required']) { Password is Required }
+        </span>
+        }
+      </div>
+
+      <div class="auth-row">
+        <label class="remember-me">
+          <input type="checkbox" formControlName="RememberMe" name="RememberMe" id="RememberMe" />
+          <span>Remember Me</span>
+        </label>
+        <a routerLink="/ForgotPassword" class="forgot-link">Forgot Password?</a>
+      </div>
+
+      <button type="submit" [disabled]="userLogin.invalid" class="auth-btn">
+        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+      </button>
+
+    </form>
+
+    <!-- Footer -->
+    <div class="auth-card-footer">
+      <p>Don't have an account? <a routerLink="/Register" class="auth-link">Create Account</a></p>
+    </div>
+
+  </div>
+</div>

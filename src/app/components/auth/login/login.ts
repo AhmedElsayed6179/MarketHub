@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import Swal from 'sweetalert2';
-import { ApiUser } from '../../service/api-user';
-import { UserAuth } from '../../service/user-auth';
+import { ApiUser } from '../../../service/api-user';
+import { UserAuth } from '../../../service/user-auth';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -65,10 +65,8 @@ export class Login implements OnInit {
     if (this.userLogin.valid) {
       const { username, password } = this.userLogin.value
       this._ApiUser.GetUsers().subscribe(users => {
-        // أول خطوة: هل اليوزر موجود أصلاً؟
         const UserFound = users.find(u => u.username === username || u.email === username)
 
-        // لو اليوزر مش موجود → الخطأ في اليوزر أو الإيميل
         if (!UserFound) {
           Swal.fire({
             title: "Error!",
@@ -79,7 +77,6 @@ export class Login implements OnInit {
           return;
         }
 
-        // نكمل بالكود بتاعك بالظبط ↓↓↓
         const FindUser = users.find(u => (u.username === username || u.email === username) && u.password === password)
 
         if (FindUser) {

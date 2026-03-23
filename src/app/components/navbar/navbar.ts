@@ -64,6 +64,13 @@ export class Navbar implements OnInit {
     }
   }
 
+  toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    if (menu) {
+      menu.classList.toggle('open');
+    }
+  }
+
   Logout() {
     this._UserAuth.Logout();
   }

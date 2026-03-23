@@ -1,45 +1,89 @@
-<footer class="footer">
-  <div class="container">
+<footer class="site-footer">
+  <div class="footer-container">
 
-    <!-- Top -->
+    <!-- Top Row -->
     <div class="footer-top">
-      <h5 class="brand">
-        MarketHub
-        <img src="market.png" alt="MarketHub Icon" class="brand-icon">
-      </h5>
 
-      <div class="footer-icons">
-        @if (isLoggedIn) {
-        <a (click)="Logout()" style="cursor: pointer;" title="Logout">
-          <i class="fas fa-sign-out-alt"></i>
-        </a>
-        }
-        @if (!isLoggedIn) {
-        <a routerLink="/Login" title="Login">
-          <i class="fas fa-sign-in-alt"></i>
-        </a>
-        }
-
-        <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
-        <a href="https://instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://tiktok.com" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
-        <a href="https://x.com" target="_blank" title="X (formerly Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+      <!-- Brand -->
+      <div class="footer-brand-col">
+        <div class="footer-brand">
+          <img src="market.png" alt="MarketHub Icon" class="footer-brand-icon" />
+          <span>MarketHub</span>
+        </div>
+        <p class="footer-tagline">Your premium shopping destination. Fast delivery, best prices, and 24/7 support.</p>
+        <div class="footer-social">
+          <a href="https://facebook.com" target="_blank" title="Facebook" class="social-link">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" title="Instagram" class="social-link">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://tiktok.com" target="_blank" title="TikTok" class="social-link">
+            <i class="fab fa-tiktok"></i>
+          </a>
+          <a href="https://x.com" target="_blank" title="X (Twitter)" class="social-link">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+        </div>
       </div>
+
+      <!-- Quick Links -->
+      <div class="footer-links-col">
+        <h6 class="footer-col-title">Quick Links</h6>
+        <ul class="footer-nav">
+          <li><a routerLink="/Home">Home</a></li>
+          <li><a routerLink="/Products">Products</a></li>
+          <li><a routerLink="/App-Download">Download App</a></li>
+          <li><a routerLink="/Terms">Terms & Conditions</a></li>
+        </ul>
+      </div>
+
+      <!-- Account -->
+      <div class="footer-links-col">
+        <h6 class="footer-col-title">Account</h6>
+        <ul class="footer-nav">
+          @if (!isLoggedIn) {
+          <li><a routerLink="/Login">Login</a></li>
+          <li><a routerLink="/Register">Register</a></li>
+          }
+          @if (isLoggedIn) {
+          <li><a routerLink="/Profile">My Profile</a></li>
+          <li><a routerLink="/Cart">My Cart</a></li>
+          <li><a (click)="Logout()" style="cursor:pointer">Logout</a></li>
+          }
+        </ul>
+      </div>
+
+      <!-- Auth Actions -->
+      <div class="footer-links-col">
+        <h6 class="footer-col-title">Support</h6>
+        <ul class="footer-nav">
+          <li><a routerLink="/Terms">Help Center</a></li>
+          <li><a routerLink="/Terms">Return Policy</a></li>
+          <li><a routerLink="/Terms">Privacy Policy</a></li>
+        </ul>
+        @if (!isLoggedIn) {
+        <div class="footer-auth-actions">
+          <a routerLink="/Login" class="footer-btn-login">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+        </div>
+        }
+      </div>
+
     </div>
 
-    <!-- Links -->
-    <div class="footer-links">
-      <a routerLink="/Terms">Terms & Conditions</a>
-    </div>
+    <!-- Divider -->
+    <div class="footer-divider"></div>
 
-    <!-- Bottom -->
+    <!-- Bottom Row -->
     <div class="footer-bottom">
-      <p>&copy; {{ today | date:'yyyy' }} MarketHub. All Rights Reserved.</p>
-      <p>
-        Website by :
-        <a href="https://ahmedelsayed6179.github.io/Ahmed-Websites" target="_blank">
-          Ahmed Mohamed
-        </a>
+      <p class="footer-copy">
+        &copy; {{ today | date:'yyyy' }} MarketHub. All Rights Reserved.
+      </p>
+      <p class="footer-credit">
+        Designed & built by
+        <a href="https://ahmedelsayed6179.github.io/Ahmed-Websites" target="_blank">Ahmed Mohamed</a>
       </p>
     </div>
 

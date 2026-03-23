@@ -1,159 +1,170 @@
-<div class="home-bg py-5">
+<div class="profile-page home-bg py-5">
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
+    <div class="profile-layout">
 
-        <div class="card shadow-lg rounded-4 p-4">
-          <div class="text-center mb-4">
-            <img src="images/profile.png" class="rounded-circle mb-3" width="110" height="110" alt="Profile">
-            <h4 class="fw-bold">
-              Welcome, {{ guestname }}
-              <img src="market.png" alt="user" width="24" height="24">
-            </h4>
+      <!-- Left: User Card -->
+      <div class="profile-sidebar">
+        <div class="profile-avatar-card">
+          <div class="profile-avatar">
+            <img src="images/profile.png" alt="Profile" />
+          </div>
+          <h4 class="profile-name">{{ guestname }}</h4>
+          <p class="profile-handle">@{{ guestname }}</p>
+
+          <div class="profile-badges">
+            <span class="profile-badge"><i class="fas fa-shield-alt"></i> Verified</span>
+            <span class="profile-badge"><i class="fas fa-star"></i> Member</span>
           </div>
 
-          <button type="button" class="btn mb-3" [class.btn-outline-primary]="!showForm"
-            [class.btn-outline-secondary]="showForm" (click)="toggleForm()">
-            {{ showForm ? 'Cancel Editing' : 'Edit Profile' }}
-          </button>
+          <div class="profile-sidebar-actions">
+            <button type="button" class="sidebar-btn-edit" [class.active]="showForm" (click)="toggleForm()">
+              <i class="fas" [class.fa-edit]="!showForm" [class.fa-times]="showForm"></i>
+              {{ showForm ? 'Cancel' : 'Edit Profile' }}
+            </button>
+            @if (!showForm) {
+            <button type="button" class="sidebar-btn-delete" (click)="deleteAccount()">
+              <i class="fas fa-trash-alt"></i> Delete Account
+            </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Edit Form -->
+      <div class="profile-main">
+        <div class="profile-form-card">
+          <div class="profile-form-header">
+            <h5>Profile Settings</h5>
+            <p>Update your personal information below</p>
+          </div>
 
           <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form" [class.show]="showForm">
 
-            <!-- Username -->
-            <div class="mb-3">
-              <label for="username" class="form-label">Username :</label>
-              <input type="text" formControlName="username" name="username" placeholder="Enter Your Username"
-                class="form-control w-100 p-2 shadow-none" maxlength="20" id="username" required />
-              @if (username?.touched && username?.invalid) {
-              <div class="text-danger text-center mt-2">
-                @if (username?.errors?.['required']) {
-                <p>Username Is Required</p>
-                }
-                @if (username?.errors?.['pattern']) {
-                <p>Username Must Be Between 4 to 10 characters long and contain no spaces</p>
+            <div class="profile-form-grid">
+
+              <!-- Username -->
+              <div class="pf-field">
+                <label for="username">Username</label>
+                <div class="pf-input-wrap">
+                  <i class="fas fa-at pf-icon"></i>
+                  <input type="text" formControlName="username" placeholder="Your username" class="pf-input"
+                    maxlength="20" id="username" />
+                </div>
+                @if (username?.touched && username?.invalid) {
+                <span class="pf-error">
+                  @if (username?.errors?.['required']) { Required }
+                  @if (username?.errors?.['pattern']) { 4-10 chars, no spaces }
+                </span>
                 }
               </div>
-              }
+
+              <!-- Full Name -->
+              <div class="pf-field">
+                <label for="name">Full Name</label>
+                <div class="pf-input-wrap">
+                  <i class="fas fa-user pf-icon"></i>
+                  <input type="text" formControlName="name" placeholder="Your full name" class="pf-input" id="name"
+                    maxlength="25" />
+                </div>
+                @if (name?.touched && name?.invalid) {
+                <span class="pf-error">
+                  @if (name?.errors?.['required']) { Required }
+                  @if (name?.errors?.['pattern']) { 4-20 characters }
+                </span>
+                }
+              </div>
+
+              <!-- Email -->
+              <div class="pf-field full-col">
+                <label for="email">Email Address</label>
+                <div class="pf-input-wrap">
+                  <i class="fas fa-envelope pf-icon"></i>
+                  <input type="email" formControlName="email" placeholder="you@example.com" class="pf-input"
+                    id="email" />
+                </div>
+                @if (email?.touched && email?.invalid) {
+                <span class="pf-error">
+                  @if (email?.errors?.['required']) { Email Required }
+                  @else if (email?.errors?.['email'] && email?.value) { Invalid Email }
+                  @else if (email?.errors?.['pattern']) { Use gmail, outlook or yahoo }
+                </span>
+                }
+              </div>
+
+              <!-- Phone -->
+              <div class="pf-field full-col">
+                <label for="phone">Phone Number</label>
+                <div class="pf-input-wrap">
+                  <i class="fas fa-phone pf-icon"></i>
+                  <input type="tel" formControlName="phone" placeholder="Your phone number" class="pf-input"
+                    id="phone" />
+                </div>
+                @if (phone?.touched && phone?.invalid) {
+                <span class="pf-error">
+                  @if (phone?.errors?.['required']) { Phone Required }
+                  @if (phone?.errors?.['invalidPhone']) { Invalid phone number }
+                </span>
+                }
+              </div>
+
+              <!-- Password -->
+              <div class="pf-field">
+                <label for="password">New Password</label>
+                <div class="pf-input-wrap">
+                  <i class="fas fa-lock pf-icon"></i>
+                  <input [type]="ShowPass ? 'text' : 'password'" formControlName="password" placeholder="New password"
+                    class="pf-input pf-input-padded" id="password" maxlength="25" />
+                  <button type="button" class="pf-toggle" (click)="TogglePass()">
+                    <i class="fas" [class.fa-eye]="!ShowPass" [class.fa-eye-slash]="ShowPass"></i>
+                  </button>
+                </div>
+                @if (password?.touched && password?.invalid) {
+                <span class="pf-error">
+                  @if (password?.errors?.['required']) { Required }
+                  @if (password?.errors?.['pattern']) { 8-25 chars + 1 number }
+                </span>
+                }
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="pf-field">
+                <label for="confirm_password">Confirm Password</label>
+                <div class="pf-input-wrap">
+                  <i class="fas fa-lock pf-icon"></i>
+                  <input [type]="ShowConfPass ? 'text' : 'password'" formControlName="confirm_password"
+                    placeholder="Re-enter password" class="pf-input pf-input-padded" id="confirm_password" />
+                  <button type="button" class="pf-toggle" (click)="ToggleConfPass()">
+                    <i class="fas" [class.fa-eye]="!ShowConfPass" [class.fa-eye-slash]="ShowConfPass"></i>
+                  </button>
+                </div>
+                @if (confirm_password?.touched && confirm_password?.errors?.['required']) {
+                <span class="pf-error">Required</span>
+                }
+                @if (confirm_password?.touched && !confirm_password?.errors?.['required'] &&
+                profileForm.errors?.['notMatching']) {
+                <span class="pf-error">Passwords don't match</span>
+                }
+              </div>
+
             </div>
 
-            <!-- Full Name -->
-            <div class="mb-3">
-              <label for="name" class="form-label">Full Name :</label>
-              <input type="text" formControlName="name" name="name" placeholder="Enter Your Full Name"
-                class="form-control w-100 p-2 shadow-none" id="name" maxlength="25" />
-              @if (name?.touched && name?.invalid) {
-              <div class="text-danger text-center mt-2">
-                @if (name?.errors?.['required']) {
-                <p>Full Name Is Required</p>
-                }
-                @if (name?.errors?.['pattern']) {
-                <p>Full Name Must Be Between 4 to 20 characters</p>
-                }
-              </div>
-              }
-            </div>
-
-            <!-- Email Address -->
-            <div class="mb-3">
-              <label for="email" class="form-label">Email Address :</label>
-              <input type="email" formControlName="email" name="email" placeholder="Enter Your Email"
-                class="form-control w-100 p-2 shadow-none" id="email" />
-              @if (email?.touched && email?.invalid)
-              {
-              <div class="text-danger text-center mt-2">
-                @if (email?.errors?.['required'])
-                {
-                <p>Email Address Is Required</p>
-                }
-                @else if (email?.errors?.['email'] && email?.value)
-                {
-                <p>Invalid Email Address</p>
-                }
-                @else if (email?.errors?.['pattern'])
-                {
-                <p>Email must be from gmail.com, outlook.com, or yahoo.com</p>
-                }
-              </div>
-              }
-            </div>
-
-            <!-- Phone Number -->
-            <div class="mb-3">
-              <label for="phone" class="form-label">Phone Number :</label>
-
-              <div class="input-group phone-group">
-                <input type="tel" id="phone" class="form-control w-100 p-2 shadow-none" formControlName="phone"
-                  placeholder="Enter your phone number" />
-              </div>
-
-              @if (phone?.touched && phone?.invalid) {
-              <div class="text-danger text-center mt-2">
-                @if (phone?.errors?.['required']) {
-                <p>Phone Number Is Required</p>
-                }
-                @if (phone?.errors?.['invalidPhone']) {
-                <p>Please enter a valid phone number</p>
-                }
-              </div>
-              }
-            </div>
-
-            <!-- Password -->
-            <div class="mb-3">
-              <label for="password" class="form-label"> New Password :</label>
-              <div class="input-group">
-                <input [type]="ShowPass ? 'text' : 'password'" placeholder="Enter your new password"
-                  formControlName="password" name="password" class="form-control shadow-none" id="password"
-                  maxlength="25" />
-                <button type="button" class="btn btn-outline-primary" (click)="TogglePass()">{{ShowPass ? "Hide" :
-                  "Show"}}</button>
-              </div>
-              @if (password?.touched && password?.invalid) {
-              <div class="text-danger text-center mt-2">
-                @if (password?.errors?.['required']) {
-                <p>Password Is Required</p>
-                }
-                @if (password?.errors?.['pattern']) {
-                <p>Password must be 8 to 25 characters long and contain at least one number</p>
-                }
-              </div>
-              }
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mb-3">
-              <label for="confirm_password" class="form-label">Confirm Password :</label>
-              <div class="input-group">
-                <input [type]="ShowConfPass ? 'text' : 'password'" placeholder="Re-enter your password"
-                  formControlName="confirm_password" name="confirm_password" class="form-control shadow-none"
-                  id="confirm_password" />
-                <button type="button" class="btn btn-outline-primary" (click)="ToggleConfPass()">{{ShowConfPass ?
-                  "Hide" :
-                  "Show"}}</button>
-              </div>
-              @if (confirm_password?.touched && confirm_password?.errors?.['required']) {
-              <p class="text-danger text-center mt-2">Confirm Password is Required</p>
-              }
-              @if (confirm_password?.touched && !confirm_password?.errors?.['required'] &&
-              profileForm.errors?.['notMatching']
-              ) {
-              <p class="text-danger text-center mt-2">Passwords do not match</p>
-              }
-            </div>
-
-            <button class="btn btn-primary w-100 mb-3" type="submit">
-              Update Profile
+            <button class="pf-submit-btn" type="submit">
+              <i class="fas fa-save me-2"></i> Save Changes
             </button>
+
           </form>
 
+          <!-- Placeholder when form is hidden -->
           @if (!showForm) {
-          <button type="button" class="btn btn-danger w-100" (click)="deleteAccount()">
-            Delete Account
-          </button>
+          <div class="profile-placeholder">
+            <i class="fas fa-user-edit"></i>
+            <p>Click <strong>Edit Profile</strong> to update your information</p>
+          </div>
           }
-        </div>
 
+        </div>
       </div>
+
     </div>
   </div>
 </div>

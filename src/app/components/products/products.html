@@ -1,98 +1,107 @@
 @if (isLoggedIn) {
-<div class="home-bg">
+<div class="products-page home-bg">
   <div class="container py-5">
-    <h2 class="text-center fw-bold mb-3 d-flex justify-content-center align-items-center gap-2">
-      Our Products
-      <img src="market.png" width="28" height="28" alt="products icon" />
-    </h2>
-    <p class="text-center text-muted mb-3">
-      You can search for any product or select your preferred category, and easily buy your favorite items in the best
-      way!
-    </p>
 
-    <div class="container py-3">
-      <div class="row g-2 align-items-center">
-        <!-- بحث باسم المنتج -->
-        <div class="col-12 col-md-6">
-          <input type="text" class="form-control" placeholder="Search by product name"
-            (ngModelChange)="filterProducts()" [(ngModel)]="searchTerm">
-        </div>
-
-        <!-- اختيار الفئة -->
-        <div class="col-12 col-md-4">
-          <select class="form-select" [(ngModel)]="selectedCategory" (ngModelChange)="filterProducts()">
-            <option value="">All Categories</option>
-            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-          </select>
-        </div>
-
-        <!-- أزرار البحث وإعادة الضبط -->
-        <div class="col-12 col-md-2 d-flex flex-wrap gap-2">
-          <button class="btn btn-primary flex-grow-1" (click)="filterProducts()">Search</button>
-          <button class="btn btn-secondary flex-grow-1" (click)="resetFilter()">Reset</button>
-        </div>
+    <!-- Page Header -->
+    <div class="products-header">
+      <div>
+        <h2 class="products-title">
+          Our Products
+          <img src="market.png" width="28" height="28" alt="products icon" class="ms-2" />
+        </h2>
+        <p class="products-subtitle">Search, filter, and find exactly what you're looking for</p>
       </div>
     </div>
 
-    <!-- No Products Found -->
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-search">
+        <i class="fas fa-search filter-search-icon"></i>
+        <input type="text" class="filter-input" placeholder="Search by product name..."
+          (ngModelChange)="filterProducts()" [(ngModel)]="searchTerm" />
+      </div>
+
+      <div class="filter-select-wrap">
+        <i class="fas fa-tag filter-select-icon"></i>
+        <select class="filter-select" [(ngModel)]="selectedCategory" (ngModelChange)="filterProducts()">
+          <option value="">All Categories</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button class="filter-btn-search" (click)="filterProducts()">
+          <i class="fas fa-search"></i> Search
+        </button>
+        <button class="filter-btn-reset" (click)="resetFilter()">
+          <i class="fas fa-undo"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading / Empty State -->
     <div *ngIf="filteredProducts$ | async as products;">
-      <div *ngIf="products.length === 0"
-        class="d-flex flex-column justify-content-center align-items-center vh-50 text-center mt-2">
-        <div class="spinner-border text-primary mb-3" role="status">
-          <span class="visually-hidden">Loading products...</span>
-        </div>
-        <span class="text-primary fw-bold fs-5">Loading Products, please wait...</span>
+      <div *ngIf="products.length === 0" class="products-loading">
+        <div class="loading-ring"></div>
+        <p>Loading Products, please wait...</p>
       </div>
     </div>
 
     <!-- Product Grid -->
-    <div *ngIf="filteredProducts$ | async as products"
-      class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-      <div *ngFor="let prd of products; let i = index" class="col">
-        <div class="card h-100 shadow rounded-3">
-          <div class="d-flex justify-content-center align-items-center bg-white p-3 border-bottom"
-            style="height: 230px; border-radius: 12px; overflow: hidden;">
-            <a (click)="navigateDetails(prd.id)" class="d-flex justify-content-center align-items-center w-100 h-100">
-              <img [src]="prd.image" [alt]="prd.title" class="img-fluid"
-                style="max-height: 200px; width: auto; object-fit: contain; transition: transform 0.3s ease; cursor: pointer;">
-            </a>
-          </div>
-          <div class="card-body">
-            <h6 class="fw-bold text-truncate mb-2">{{ i + 1 }} - {{ prd.title }}</h6>
-            <p class="text-primary fw-semibold mb-1">{{ prd.price | currency:'USD' }}</p>
-            <p class="small text-muted mt-1 mb-2">{{ prd.category }}</p>
-            <p class="small text-muted text-truncate">{{ prd.description }}</p>
-            <div class="d-flex align-items-center mt-2">
-              <span class="badge bg-success me-2">{{ prd.rating.rate }} ★</span>
-              <small class="text-muted">({{ prd.rating.count }} reviews)</small>
-            </div>
-          </div>
-          <div class="card-footer bg-transparent border-0 text-center pb-3 d-flex">
-            <button class="btn btn-outline-primary btn-sm px-4 me-2" (click)="addToCart(prd)">Add to Cart</button>
-            <button class="btn btn-outline-info btn-sm px-4" (click)="navigateDetails(prd.id)">View Details</button>
+    <div *ngIf="filteredProducts$ | async as products" class="products-grid">
+      <div *ngFor="let prd of products; let i = index" class="product-card">
+
+        <!-- Image -->
+        <div class="product-card-img-wrap">
+          <a (click)="navigateDetails(prd.id)" class="product-img-link">
+            <img [src]="prd.image" [alt]="prd.title" class="product-card-img" />
+          </a>
+          <span class="product-rating-badge">★ {{ prd.rating.rate }}</span>
+        </div>
+
+        <!-- Body -->
+        <div class="product-card-body">
+          <span class="product-card-category">{{ prd.category }}</span>
+          <h6 class="product-card-title">{{ prd.title }}</h6>
+          <p class="product-card-desc">{{ prd.description }}</p>
+
+          <div class="product-card-meta">
+            <span class="product-card-price">{{ prd.price | currency:'USD' }}</span>
+            <span class="product-card-reviews">({{ prd.rating.count }})</span>
           </div>
         </div>
+
+        <!-- Footer -->
+        <div class="product-card-footer">
+          <button class="btn-card-cart" (click)="addToCart(prd)">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+          <button class="btn-card-details" (click)="navigateDetails(prd.id)">
+            Details
+          </button>
+        </div>
+
       </div>
     </div>
+
   </div>
 </div>
 }
 
 @if (!isLoggedIn) {
-<div class="home-bg d-flex justify-content-center align-items-center min-vh-100">
-  <div class="text-center">
-    <img src="images/error.png" alt="Not Logged In" class="img-fluid mb-4 floating-img" style="max-width: 180px;">
-    <h1 class="display-5 fw-bold text-warning mb-3">You are not logged in</h1>
-    <p class="lead mb-4">
-      Please log in or register to view products
-      <img src="market.png" alt="icon" style="width:20px; height:20px; margin-left:6px;">
-    </p>
-    <div class="d-flex justify-content-center gap-3 flex-wrap">
-      <a routerLink="/Login" class="btn btn-primary btn-lg px-4 py-2">
-        Login <i class="fas fa-sign-in-alt ms-2"></i>
+<div class="products-locked home-bg">
+  <div class="locked-inner">
+    <div class="locked-icon">
+      <i class="fas fa-lock"></i>
+    </div>
+    <h2>Login Required</h2>
+    <p>Please sign in or create an account to browse our products.</p>
+    <div class="locked-actions">
+      <a routerLink="/Login" class="locked-btn-primary">
+        <i class="fas fa-sign-in-alt"></i> Login
       </a>
-      <a routerLink="/Register" class="btn btn-info btn-lg text-white px-4 py-2">
-        Register <i class="fas fa-user-plus ms-2"></i>
+      <a routerLink="/Register" class="locked-btn-secondary">
+        <i class="fas fa-user-plus"></i> Register
       </a>
     </div>
   </div>

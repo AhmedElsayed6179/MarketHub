@@ -1,147 +1,183 @@
-<div class="home-bg container-fluid py-5 text-center">
+<div class="home-bg container-fluid px-0">
 
-  <!-- العنوان -->
-  @if (!isLoggedIn) {
-  <h1 class="home-Login">Welcome to MarketHub</h1>
-  }
-
-  <!-- وصف الصفحة -->
-  @if (isLoggedIn && username) {
-  <p class="lead text-muted mb-4">
-    Welcome back, <strong>{{ username }}</strong>! Start exploring our products and place your orders easily
-  </p>
-  }
-  @if (!isLoggedIn) {
-  <p class="lead text-muted mb-4">Hello! Discover a variety of products and enjoy a smooth shopping experience</p>
-  }
-
-  <!-- أزرار الإجراءات -->
-  <div class="d-flex justify-content-center flex-wrap mb-5 gap-3">
-    @if (isLoggedIn) {
-    <button class="btn btn-info btn-lg" routerLink="/Products">
-      <i class="fas fa-box-open me-2"></i> Products
-    </button>
-    <button class="btn btn-primary btn-lg" (click)="Logout()">
-      <i class="fas fa-sign-out-alt me-2"></i> Logout
-    </button>
-    }
-    @if (!isLoggedIn) {
-    <button class="btn btn-primary btn-lg" routerLink="/Login">
-      <i class="fas fa-sign-in-alt me-2"></i> Login
-    </button>
-    <button class="btn btn-info btn-lg" routerLink="/Register">
-      <i class="fas fa-user-plus me-2"></i> Register
-    </button>
-    }
-  </div>
-
-  <!-- Section 1: مميزات المتجر -->
-  <section class="row text-center mb-5">
-    <div class="col-md-4 mb-4">
-      <div class="p-4 bg-white rounded-3 shadow-sm h-100">
-        <i class="fas fa-shipping-fast fa-3x text-info mb-3"></i>
-        <h5 class="fw-bold">Fast Delivery</h5>
-        <p class="text-muted">Get your products delivered quickly and safely.</p>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      @if (!isLoggedIn) {
+      <div class="hero-badge">✦ New Season Arrivals</div>
+      <h1 class="hero-title">
+        <span class="hero-title-line">Discover</span>
+        <span class="hero-title-line accent">Premium</span>
+        <span class="hero-title-line">Products</span>
+      </h1>
+      <p class="hero-subtitle">Experience curated shopping like never before — quality, value, and speed in one place.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary-hero" routerLink="/Login">
+          <i class="fas fa-sign-in-alt"></i> Get Started
+        </button>
+        <button class="btn-secondary-hero" routerLink="/Register">
+          <i class="fas fa-user-plus"></i> Create Account
+        </button>
       </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="p-4 bg-white rounded-3 shadow-sm h-100">
-        <i class="fas fa-tags fa-3x text-success mb-3"></i>
-        <h5 class="fw-bold">Best Prices</h5>
-        <p class="text-muted">We offer competitive prices on all products.</p>
+      }
+      @if (isLoggedIn && username) {
+      <div class="hero-badge">✦ Welcome Back</div>
+      <h1 class="hero-title">
+        <span class="hero-title-line">Hey,</span>
+        <span class="hero-title-line accent">{{ username }}</span>
+        <span class="hero-title-line">👋</span>
+      </h1>
+      <p class="hero-subtitle">Your personalized store is ready. Browse the latest deals and exclusive products.</p>
+      <div class="hero-actions">
+        <button class="btn-primary-hero" routerLink="/Products">
+          <i class="fas fa-box-open"></i> Shop Now
+        </button>
+        <button class="btn-secondary-hero" (click)="Logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
       </div>
+      }
     </div>
-    <div class="col-md-4 mb-4">
-      <div class="p-4 bg-white rounded-3 shadow-sm h-100">
-        <i class="fas fa-headset fa-3x text-warning mb-3"></i>
-        <h5 class="fw-bold">24/7 Support</h5>
-        <p class="text-muted">Our support team is here to help anytime.</p>
+    <div class="hero-visual">
+      <div class="hero-blob"></div>
+      <div class="hero-circles">
+        <div class="circle c1"></div>
+        <div class="circle c2"></div>
+        <div class="circle c3"></div>
+      </div>
+      <img src="images/clothing.jpg" alt="MarketHub Products" class="hero-image" />
+    </div>
+  </section>
+
+  <!-- Stats Strip -->
+  <section class="stats-strip">
+    <div class="stat-item">
+      <span class="stat-num">10K+</span>
+      <span class="stat-label">Products</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">50K+</span>
+      <span class="stat-label">Happy Customers</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">4.9★</span>
+      <span class="stat-label">Average Rating</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">24/7</span>
+      <span class="stat-label">Support</span>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-header">
+      <span class="section-tag">Why Choose Us</span>
+      <h2 class="section-title-main">Everything You Need,<br>In One Place</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fc-blue">
+        <div class="feature-icon">
+          <i class="fas fa-shipping-fast"></i>
+        </div>
+        <h5>Fast Delivery</h5>
+        <p>Get your products delivered quickly and safely to your doorstep.</p>
+        <div class="feature-number">01</div>
+      </div>
+      <div class="feature-card fc-green">
+        <div class="feature-icon">
+          <i class="fas fa-tags"></i>
+        </div>
+        <h5>Best Prices</h5>
+        <p>We offer competitive prices on all products, guaranteed.</p>
+        <div class="feature-number">02</div>
+      </div>
+      <div class="feature-card fc-orange">
+        <div class="feature-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h5>24/7 Support</h5>
+        <p>Our support team is here to help anytime, anywhere.</p>
+        <div class="feature-number">03</div>
       </div>
     </div>
   </section>
 
-  <!-- Section 2: Call to Action -->
-  @if (isLoggedIn) {
-  <section class="bg-primary text-white py-5 rounded-3 shadow-sm mb-5">
-    <h3 class="mb-3">Ready to Start Shopping?</h3>
-    <p class="mb-4 lead">Browse our wide range of products and place your order now.</p>
-    <button class="btn btn-light btn-lg fw-bold" routerLink="/Products">
-      <i class="fas fa-shopping-cart me-2"></i> View Products
-    </button>
-  </section>
-  }
-  @if (!isLoggedIn) {
-  <section class="bg-primary text-white py-5 rounded-3 shadow-sm mb-5">
-    <h3 class="mb-3">Join MarketHub Today!</h3>
-    <p class="mb-4 lead">Sign in or register now to explore our products and enjoy a smooth shopping experience.</p>
-    <button class="btn btn-light btn-lg fw-bold" routerLink="/Login">
-      <i class="fas fa-sign-in-alt"></i> Login
-    </button>
-  </section>
-  }
-
-  <!-- Section 3: Contact Form with Image -->
-  <section class="row align-items-center mb-5">
-    <!-- صورة -->
-    <div class="col-md-6 mb-4 mb-md-0">
-      <img src="images/clothing.jpg" alt="Contact Us" class="img-fluid rounded-3 shadow">
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <div class="cta-text">
+        @if (isLoggedIn) {
+        <h3>Ready to Start Shopping?</h3>
+        <p>Browse our wide range of products and place your order now.</p>
+        <button class="btn-cta" routerLink="/Products">
+          <i class="fas fa-shopping-cart me-2"></i>View Products
+        </button>
+        }
+        @if (!isLoggedIn) {
+        <h3>Join MarketHub Today!</h3>
+        <p>Sign in or register now to explore our products and enjoy a smooth shopping experience.</p>
+        <button class="btn-cta" routerLink="/Login">
+          <i class="fas fa-sign-in-alt me-2"></i>Login Now
+        </button>
+        }
+      </div>
+      <div class="cta-decoration">
+        <div class="deco-ring r1"></div>
+        <div class="deco-ring r2"></div>
+        <div class="deco-ring r3"></div>
+      </div>
     </div>
+  </section>
 
-    <!-- الفورم -->
-    <div class="col-md-6">
-      <div class="card shadow-sm rounded-3 p-4">
-        <h4 class="mb-4 text-center">Contact Us</h4>
-        <p class="text-muted text-center mb-4">
-          Have questions or need help? Fill out the form below and we'll get back to you shortly.
-        </p>
-        <form class="p-3 bg-light rounded-3 shadow-sm" [formGroup]="contactForm" (ngSubmit)="submitForm()">
-          <div class="mb-3">
-            <label for="name" class="form-label fw-semibold">Name</label>
-            <input type="text" class="form-control form-control-sm" id="name" placeholder="Your Name"
-              formControlName="name">
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="contact-inner">
+      <div class="contact-image-col">
+        <div class="contact-img-wrap">
+          <img src="images/clothing.jpg" alt="Contact Us" />
+          <div class="img-tag">
+            <i class="fas fa-envelope"></i> We'd love to hear from you
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-col">
+        <span class="section-tag">Contact Us</span>
+        <h3 class="contact-title">Have a Question?<br>Let's Talk.</h3>
+        <p class="contact-desc">Fill out the form below and we'll get back to you shortly.</p>
+        <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="submitForm()">
+          <div class="form-group">
+            <input type="text" class="form-input" placeholder="Your Name" formControlName="name">
             @if (name?.touched && name?.invalid) {
-            <div class="text-danger text-center mt-2">
-              @if (name?.errors?.['required']) {
-              <p>Your Name Is Required</p>
-              }
-            </div>
+            <span class="field-error">Your Name is Required</span>
             }
           </div>
-          <div class="mb-3">
-            <label for="email" class="form-label fw-semibold">Email</label>
-            <input type="email" class="form-control form-control-sm" id="email" placeholder="you@example.com"
-              formControlName="email">
+          <div class="form-group">
+            <input type="email" class="form-input" placeholder="you@example.com" formControlName="email">
             @if (email?.touched && email?.invalid) {
-            <div class="text-danger text-center mt-2">
-              @if (email?.errors?.['required']) {
-              <p>Your Email Address Is Required</p>
-              }
-              @if (email?.errors?.['email'] && email?.value) {
-              <p>Invalid Email Address</p>
-              }
-            </div>
+            <span class="field-error">
+              @if (email?.errors?.['required']) { Email is Required }
+              @if (email?.errors?.['email'] && email?.value) { Invalid Email }
+            </span>
             }
           </div>
-          <div class="mb-3">
-            <label for="message" class="form-label fw-semibold">Message</label>
-            <textarea class="form-control form-control-sm" style="resize: none;" id="message" rows="5"
-              placeholder="Your Message" formControlName="message"></textarea>
+          <div class="form-group">
+            <textarea class="form-input form-textarea" placeholder="Your Message" rows="4"
+              formControlName="message"></textarea>
             @if (message?.touched && message?.invalid) {
-            <div class="text-danger text-center mt-2">
-              @if (message?.errors?.['required']) {
-              <p>Your Message Is Required</p>
-              }
-            </div>
+            <span class="field-error">Message is Required</span>
             }
           </div>
-          <div class="text-center">
-            <button type="submit" class="btn btn-primary btn-sm fw-bold">
-              <i class="fas fa-paper-plane me-1"></i> Send
-            </button>
-          </div>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane me-2"></i>Send Message
+          </button>
         </form>
       </div>
     </div>
   </section>
-</div>
 
+</div>

@@ -1,0 +1,143 @@
+<div class="auth-page Image-Background">
+  <div class="auth-overlay"></div>
+
+  <div class="auth-card auth-card-wide">
+
+    <!-- Header -->
+    <div class="auth-card-header">
+      <div class="auth-logo">
+        <img src="market.png" alt="MarketHub" />
+      </div>
+      <h2 class="auth-title">Create Account</h2>
+      <p class="auth-subtitle">Join MarketHub and start shopping today</p>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="userRegisterForm" (submit)="Register()" class="auth-form">
+
+      <!-- Username + Full Name -->
+      <div class="auth-grid-2">
+        <div class="auth-field">
+          <label for="username">Username</label>
+          <div class="field-wrap">
+            <i class="fas fa-at field-icon"></i>
+            <input type="text" formControlName="username" placeholder="username" class="auth-input" maxlength="20"
+              id="username" />
+          </div>
+          @if (username?.touched && username?.invalid) {
+          <span class="auth-error">
+            @if (username?.errors?.['required']) { Required }
+            @if (username?.errors?.['pattern']) { 4-10 chars, no spaces }
+          </span>
+          }
+        </div>
+
+        <div class="auth-field">
+          <label for="name">Full Name</label>
+          <div class="field-wrap">
+            <i class="fas fa-user field-icon"></i>
+            <input type="text" formControlName="name" placeholder="Full Name" class="auth-input" id="name"
+              maxlength="25" />
+          </div>
+          @if (name?.touched && name?.invalid) {
+          <span class="auth-error">
+            @if (name?.errors?.['required']) { Required }
+            @if (name?.errors?.['pattern']) { 4-20 characters }
+          </span>
+          }
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="auth-field">
+        <label for="email">Email Address</label>
+        <div class="field-wrap">
+          <i class="fas fa-envelope field-icon"></i>
+          <input type="email" formControlName="email" placeholder="you@example.com" class="auth-input" id="email" />
+        </div>
+        @if (email?.touched && email?.invalid) {
+        <span class="auth-error">
+          @if (email?.errors?.['required']) { Email is Required }
+          @else if (email?.errors?.['email'] && email?.value) { Invalid Email }
+          @else if (email?.errors?.['pattern']) { Use gmail, outlook or yahoo }
+        </span>
+        }
+      </div>
+
+      <!-- Phone -->
+      <div class="auth-field">
+        <label for="phone">Phone Number</label>
+        <div class="field-wrap">
+          <i class="fas fa-phone field-icon"></i>
+          <input type="tel" formControlName="phone" placeholder="Enter your phone number" class="auth-input"
+            id="phone" />
+        </div>
+        @if (phone?.touched && phone?.invalid) {
+        <span class="auth-error">
+          @if (phone?.errors?.['required']) { Phone is Required }
+          @if (phone?.errors?.['invalidPhone']) { Invalid phone number }
+        </span>
+        }
+      </div>
+
+      <!-- Password + Confirm -->
+      <div class="auth-grid-2">
+        <div class="auth-field">
+          <label for="password">Password</label>
+          <div class="field-wrap">
+            <i class="fas fa-lock field-icon"></i>
+            <input [type]="ShowPass ? 'text' : 'password'" formControlName="password" placeholder="Password"
+              class="auth-input auth-input-padded" id="password" maxlength="25" />
+            <button type="button" class="toggle-pass" (click)="TogglePass()">
+              <i class="fas" [class.fa-eye]="!ShowPass" [class.fa-eye-slash]="ShowPass"></i>
+            </button>
+          </div>
+          @if (password?.touched && password?.invalid) {
+          <span class="auth-error">
+            @if (password?.errors?.['required']) { Required }
+            @if (password?.errors?.['pattern']) { 8-25 chars + 1 number }
+          </span>
+          }
+        </div>
+
+        <div class="auth-field">
+          <label for="confirm_password">Confirm Password</label>
+          <div class="field-wrap">
+            <i class="fas fa-lock field-icon"></i>
+            <input [type]="ShowConfPass ? 'text' : 'password'" formControlName="confirm_password" placeholder="Re-enter"
+              class="auth-input auth-input-padded" id="confirm_password" />
+            <button type="button" class="toggle-pass" (click)="ToggleConfPass()">
+              <i class="fas" [class.fa-eye]="!ShowConfPass" [class.fa-eye-slash]="ShowConfPass"></i>
+            </button>
+          </div>
+          @if (confirm_password?.touched && confirm_password?.errors?.['required']) {
+          <span class="auth-error">Required</span>
+          }
+          @if (confirm_password?.touched && !confirm_password?.errors?.['required'] &&
+          userRegisterForm.errors?.['notMatching']) {
+          <span class="auth-error">Passwords don't match</span>
+          }
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <label class="auth-terms">
+        <input type="checkbox" formControlName="terms" id="terms" />
+        <span>I agree to the <a routerLink="/Terms">Terms & Conditions</a></span>
+      </label>
+      @if (terms?.touched && terms?.invalid) {
+      <span class="auth-error" style="margin-top:-10px;">You must agree to the Terms & Conditions</span>
+      }
+
+      <button type="submit" [disabled]="userRegisterForm.invalid" class="auth-btn">
+        <i class="fas fa-user-plus me-2"></i>Create Account
+      </button>
+
+    </form>
+
+    <div class="auth-card-footer">
+      <p>Already have an account? <a routerLink="/Login" class="auth-link">Sign In</a></p>
+    </div>
+
+  </div>
+</div>

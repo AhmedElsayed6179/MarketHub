@@ -1,90 +1,168 @@
+/* =========================================
+   TERMS PAGE — MarketHub
+   ========================================= */
+
+.terms-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
 .terms-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px 30px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+.terms-header {
+  text-align: center;
+  padding: 20px 0 48px;
+}
+
+.terms-icon {
+  width: 68px;
+  height: 68px;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  color: #fff;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.25);
 }
 
 .terms-title {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #007bff;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 14px;
+  letter-spacing: -0.03em;
 }
 
 .terms-intro {
-  font-size: 1rem;
-  margin-bottom: 30px;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.75;
+  margin: 0 0 20px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.terms-meta {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.terms-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.terms-meta i {
+  color: #cbd5e1;
+}
+
+/* Body */
+.terms-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .terms-section {
-  margin-bottom: 25px;
+  display: flex;
+  gap: 20px;
+  padding: 28px 0;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.2s;
 }
 
-.terms-section h2 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  color: #555;
+.terms-section:last-child {
+  border-bottom: none;
 }
 
-.terms-section p {
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #666;
+.terms-section-num {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #cbd5e1;
+  letter-spacing: 0.05em;
+  padding-top: 4px;
+  min-width: 28px;
+  flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
-  .terms-container {
-    margin: 30px 15px;
-    padding: 15px 20px;
-  }
-
-  .terms-title {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-  }
-
-  .terms-intro {
-    font-size: 0.95rem;
-    margin-bottom: 20px;
-  }
-
-  .terms-section h2 {
-    font-size: 1.1rem;
-  }
-
-  .terms-section p {
-    font-size: 0.9rem;
-    line-height: 1.4;
-  }
+.terms-section-content h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
 }
 
-@media (max-width: 480px) {
-  .terms-container {
-    margin: 20px 10px;
-    padding: 12px 15px;
+.terms-section-content p {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.terms-section-content a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.terms-section-content a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Footer CTA */
+.terms-footer-cta {
+  padding: 36px 0 20px;
+  text-align: center;
+}
+
+.terms-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 24px;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  color: #475569;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.terms-back-btn:hover {
+  background: #f8fafc;
+  border-color: #2563eb;
+  color: #2563eb;
+  transform: translateX(-3px);
+}
+
+@media (max-width: 576px) {
+  .terms-section {
+    gap: 14px;
   }
 
-  .terms-title {
-    font-size: 1.5rem;
-  }
-
-  .terms-intro {
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-  }
-
-  .terms-section h2 {
-    font-size: 1rem;
-  }
-
-  .terms-section p {
-    font-size: 0.85rem;
-    line-height: 1.35;
+  .terms-section-num {
+    display: none;
   }
 }

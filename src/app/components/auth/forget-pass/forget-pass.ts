@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
-import { ApiUser } from '../../service/api-user';
+import { ApiUser } from '../../../service/api-user';
 import Swal from 'sweetalert2';
 
 @Component({

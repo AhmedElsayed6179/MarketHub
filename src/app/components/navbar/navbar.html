@@ -1,58 +1,75 @@
-<nav class="navbar navbar-expand-lg navbar-dark px-3 main-navbar" id="mainNavbar">
-  <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" routerLink="/Home">
-      <span>{{ username ? ('Hi, ' + username) : 'MarketHub' }}</span>
-      <img src="market.png" width="22" height="22" alt="icon" />
+<nav class="main-navbar" id="mainNavbar">
+  <div class="navbar-inner">
+
+    <!-- Brand -->
+    <a class="navbar-brand" routerLink="/Home">
+      <img src="market.png" width="28" height="28" alt="icon" class="brand-logo" />
+      <span class="brand-text">{{ username ? ('Hi, ' + username) : 'MarketHub' }}</span>
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
-      <span class="navbar-toggler-icon"></span>
+    <!-- Desktop Nav -->
+    <ul class="nav-links">
+      <li>
+        <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          Home
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" routerLink="/Products" routerLinkActive="active">Products</a>
+      </li>
+      @if(showDownloadLink){
+      <li>
+        <a class="nav-link" routerLink="/App-Download" routerLinkActive="active">Download App</a>
+      </li>
+      }
+      @if (IsloggedIn) {
+      <li>
+        <a class="nav-link cart-link" routerLink="/Cart" routerLinkActive="active">
+          <span class="cart-icon">🛒</span>
+          <span>Cart</span>
+          <span class="cart-count">{{ cartCount$ | async }}</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" routerLink="/Profile" routerLinkActive="active">Profile</a>
+      </li>
+      <li>
+        <button class="nav-btn-logout" (click)="Logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </li>
+      }
+      @if (!IsloggedIn) {
+      <li>
+        <a class="nav-btn-login" routerLink="/Login" routerLinkActive="active">
+          Login
+        </a>
+      </li>
+      }
+    </ul>
+
+    <!-- Mobile Toggle -->
+    <button class="nav-toggle" id="navToggle" (click)="toggleMobileMenu()">
+      <span></span><span></span><span></span>
     </button>
+  </div>
 
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav ms-auto align-items-lg-center">
-        <li class="nav-item mx-2">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-            Home
-          </a>
-        </li>
-
-        <li class="nav-item mx-2">
-          <a class="nav-link" routerLink="/Products" routerLinkActive="active">Products</a>
-        </li>
-
-        @if(showDownloadLink){
-        <li class="nav-item mx-2">
-          <a class="nav-link" routerLink="/App-Download" routerLinkActive="active">Download App</a>
-        </li>
-        }
-
-        @if (!IsloggedIn) {
-        <li class="nav-item mx-2">
-          <a class="nav-link btn btn-outline-danger px-3 py-1 rounded-pill" routerLinkActive="active"
-            routerLink="/Login">Login</a>
-        </li>
-        }
-
-        @if (IsloggedIn) {
-        <li class="nav-item mx-2 position-relative">
-          <a class="nav-link d-flex align-items-center gap-1" routerLinkActive="active" routerLink="/Cart">
-            🛒 Cart
-            <span class="cart-badge">({{ cartCount$ | async }})</span>
-          </a>
-        </li>
-
-        <li class="nav-item mx-2">
-          <a class="nav-link" routerLinkActive="active" routerLink="/Profile">Profile</a>
-        </li>
-
-        <li class="nav-item mx-2">
-          <a class="nav-link text-danger" (click)="Logout()" style="cursor:pointer">
-            Logout
-          </a>
-        </li>
-        }
-      </ul>
-    </div>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul class="mobile-nav-links">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+      <li><a routerLink="/Products" routerLinkActive="active">Products</a></li>
+      @if(showDownloadLink){
+      <li><a routerLink="/App-Download" routerLinkActive="active">Download App</a></li>
+      }
+      @if (IsloggedIn) {
+      <li><a routerLink="/Cart" routerLinkActive="active">🛒 Cart ({{ cartCount$ | async }})</a></li>
+      <li><a routerLink="/Profile" routerLinkActive="active">Profile</a></li>
+      <li><button class="mobile-logout" (click)="Logout()">Logout</button></li>
+      }
+      @if (!IsloggedIn) {
+      <li><a routerLink="/Login" class="mobile-login-btn">Login</a></li>
+      }
+    </ul>
   </div>
 </nav>

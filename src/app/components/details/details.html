@@ -1,64 +1,88 @@
-<!-- Wrapper بالخلفية -->
-<div class="home-bg">
+<!-- Main Page -->
+<div class="details-page home-bg">
 
-  <!-- Product Content -->
   <div *ngIf="product$ | async as product; else loading" class="container py-5">
-    <div class="row g-4 align-items-center">
 
-      <!-- Product Image -->
-      <div class="col-md-6 text-center">
-        <img [src]="product.image" [alt]="product.title" class="img-fluid product-img" />
-      </div>
+    <!-- Breadcrumb -->
+    <nav class="detail-breadcrumb">
+      <a routerLink="/Products">← Back to Products</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">{{ product.category }}</span>
+    </nav>
 
-      <!-- Product Details -->
-      <div class="col-md-6">
-        <h2 class="fw-bold mb-2">{{ product.title }}</h2>
+    <!-- Product Layout -->
+    <div class="product-detail-layout">
 
-        <p class="text-muted mb-1">
-          <strong>Category:</strong> {{ product.category }}
-        </p>
-
-        <p class="text-primary fw-semibold fs-4 mb-2">
-          {{ product.price | currency:'USD' }}
-        </p>
-
-        <p class="mt-3">{{ product.description }}</p>
-
-        <div class="d-flex align-items-center mt-2 mb-3">
-          <span class="badge bg-success me-2">
-            {{ product.rating.rate }} ★
-          </span>
-          <small class="text-muted">
-            ({{ product.rating.count }} reviews)
-          </small>
+      <!-- Left: Image -->
+      <div class="product-image-col">
+        <div class="product-image-card">
+          <div class="product-badge-category">{{ product.category }}</div>
+          <img [src]="product.image" [alt]="product.title" class="detail-product-img" />
         </div>
-
-        <div class="d-flex gap-2 mb-4 flex-wrap">
-          <button class="btn btn-outline-primary flex-grow-1" (click)="addToCart(product)">
-            Add to Cart
+        <!-- Navigation Arrows -->
+        <div class="product-nav">
+          <button class="nav-btn" [disabled]="currentId == idsArr[0]" (click)="prev()">
+            <i class="fas fa-chevron-left"></i> Prev
           </button>
-
-          <button class="btn btn-outline-secondary flex-grow-1" (click)="openCheckout(product)">
-            Buy Now
-          </button>
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <button class="btn btn-danger" [disabled]="currentId == idsArr[0]" (click)="prev()">
-            Prev
-          </button>
-
-          <button class="btn btn-secondary" routerLink="/Products">
-            ← Back to Products
-          </button>
-
-          <button class="btn btn-success" [disabled]="currentId == idsArr[idsArr.length - 1]" (click)="next()">
-            Next
+          <span class="nav-indicator">{{ currentId }} of {{ idsArr.length }}</span>
+          <button class="nav-btn" [disabled]="currentId == idsArr[idsArr.length - 1]" (click)="next()">
+            Next <i class="fas fa-chevron-right"></i>
           </button>
         </div>
       </div>
 
+      <!-- Right: Details -->
+      <div class="product-info-col">
+
+        <div class="product-meta-row">
+          <span class="product-category-tag">{{ product.category }}</span>
+          <div class="product-rating">
+            <span class="rating-stars">★ {{ product.rating.rate }}</span>
+            <span class="rating-count">({{ product.rating.count }} reviews)</span>
+          </div>
+        </div>
+
+        <h1 class="product-title-detail">{{ product.title }}</h1>
+
+        <div class="product-price-block">
+          <span class="product-price-main">{{ product.price | currency:'USD' }}</span>
+          <span class="product-price-tag">In Stock</span>
+        </div>
+
+        <div class="product-desc">
+          <h6>Description</h6>
+          <p>{{ product.description }}</p>
+        </div>
+
+        <div class="product-divider"></div>
+
+        <!-- Actions -->
+        <div class="product-actions">
+          <button class="btn-add-cart" (click)="addToCart(product)">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+          <button class="btn-buy-now" (click)="openCheckout(product)">
+            <i class="fas fa-bolt"></i> Buy Now
+          </button>
+        </div>
+
+        <!-- Trust Row -->
+        <div class="product-trust-row">
+          <div class="trust-item">
+            <i class="fas fa-shipping-fast"></i>
+            <span>Fast Delivery</span>
+          </div>
+          <div class="trust-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Secure Payment</span>
+          </div>
+          <div class="trust-item">
+            <i class="fas fa-undo"></i>
+            <span>Easy Returns</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -66,71 +90,74 @@
 
 <!-- Loading State -->
 <ng-template #loading>
-  <div class="product-bg d-flex flex-column justify-content-center align-items-center min-vh-100 text-center">
-    <div class="spinner-border text-primary mb-3" style="width:3rem; height:3rem;" role="status">
-      <span class="visually-hidden">Loading product...</span>
+  <div class="detail-loading">
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
     </div>
-
-    <h5 class="fw-bold text-primary mb-1">
-      Fetching Product Details
-    </h5>
-    <small class="text-muted">
-      Please wait while we load the product for you.
-    </small>
+    <h5>Loading Product</h5>
+    <p>Fetching product details, please wait...</p>
   </div>
 </ng-template>
 
-<!-- Overlay -->
+<!-- Checkout Overlay Modal -->
 <div class="checkout-overlay" *ngIf="showCheckout">
-  <div class="checkout-modal">
+  <div class="checkout-modal" (click)="$event.stopPropagation()">
 
-    <h4 class="mb-3">Complete Your Order</h4>
+    <div class="modal-header-row">
+      <h4>Complete Your Order</h4>
+      <button class="modal-close" (click)="closeCheckout()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
 
-    <form [formGroup]="checkoutForm">
-
-      <input class="form-control mb-2" placeholder="Name" formControlName="name" />
-      <div *ngIf="name?.touched && name?.invalid" class="text-danger mt-1">Name is required</div>
-      <input class="form-control mb-2" placeholder="Address" formControlName="address" />
-      <div *ngIf="address?.touched && address?.invalid" class="text-danger mt-1">Address is required</div>
-      <input class="form-control mb-2" placeholder="Phone" formControlName="phone" />
-      <div *ngIf="phone?.touched && phone?.invalid" class="text-danger mt-1">Phone is required</div>
-
-      <div class="mb-3">
-        <label class="fw-semibold d-block mb-2">Payment Method</label>
-
-        <label class="me-3">
-          <input type="radio" value="cod" formControlName="paymentMethod" />
-          Cash
-        </label>
-
-        <label>
-          <input type="radio" value="visa" formControlName="paymentMethod" />
-          Visa
-        </label>
+    <form [formGroup]="checkoutForm" class="modal-form">
+      <div class="modal-field">
+        <label>Full Name</label>
+        <input class="modal-input" placeholder="John Doe" formControlName="name" />
+        <div *ngIf="name?.touched && name?.invalid" class="modal-error">Name is required</div>
       </div>
 
-      <!-- Visa Fields -->
-      <div *ngIf="checkoutForm.get('paymentMethod')?.value === 'visa'" class="visa-box">
+      <div class="modal-field">
+        <label>Address</label>
+        <input class="modal-input" placeholder="Your delivery address" formControlName="address" />
+        <div *ngIf="address?.touched && address?.invalid" class="modal-error">Address is required</div>
+      </div>
 
-        <input class="form-control mb-2" placeholder="Card Number" formControlName="cardNumber" />
-        <input class="form-control mb-2" placeholder="Cardholder Name" formControlName="cardName" />
+      <div class="modal-field">
+        <label>Phone</label>
+        <input class="modal-input" placeholder="+20 1XX XXXX" formControlName="phone" />
+        <div *ngIf="phone?.touched && phone?.invalid" class="modal-error">Phone is required</div>
+      </div>
 
-        <div class="d-flex gap-2">
-          <input class="form-control" placeholder="MM/YY" formControlName="expiry" />
-          <input class="form-control" placeholder="CVV" formControlName="cvv" />
+      <div class="modal-field">
+        <label>Payment Method</label>
+        <div class="modal-payment-row">
+          <label class="modal-pay-opt">
+            <input type="radio" value="cod" formControlName="paymentMethod" />
+            <span><i class="fas fa-money-bill-wave"></i> Cash</span>
+          </label>
+          <label class="modal-pay-opt">
+            <input type="radio" value="visa" formControlName="paymentMethod" />
+            <span><i class="fas fa-credit-card"></i> Visa</span>
+          </label>
         </div>
-
       </div>
 
-      <div class="d-flex gap-2">
-        <button class="btn btn-success flex-grow-1" (click)="confirmOrder()">
-          Confirm Order
-        </button>
-        <button class="btn btn-outline-secondary" (click)="closeCheckout()">
-          Cancel
-        </button>
+      <div *ngIf="checkoutForm.get('paymentMethod')?.value === 'visa'" class="modal-visa-fields">
+        <input class="modal-input" placeholder="Card Number" formControlName="cardNumber" />
+        <input class="modal-input" placeholder="Cardholder Name" formControlName="cardName" />
+        <div class="modal-grid-2">
+          <input class="modal-input" placeholder="MM/YY" formControlName="expiry" />
+          <input class="modal-input" placeholder="CVV" formControlName="cvv" />
+        </div>
       </div>
 
+      <div class="modal-actions">
+        <button type="button" class="modal-btn-confirm" (click)="confirmOrder()">
+          <i class="fas fa-check me-2"></i>Confirm Order
+        </button>
+        <button type="button" class="modal-btn-cancel" (click)="closeCheckout()">Cancel</button>
+      </div>
     </form>
 
   </div>

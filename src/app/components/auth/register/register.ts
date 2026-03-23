@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
-import { ApiUser } from '../../service/api-user';
+import { ApiUser } from '../../../service/api-user';
 import Swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
 
